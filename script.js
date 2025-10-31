@@ -10,8 +10,3 @@
     showSignin.addEventListener('click', () => {
       container.classList.remove('show-signup');
     });
-    function changePage() {
-
-window.location="index.html";
-
-}
