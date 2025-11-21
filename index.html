@@ -1,160 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product Landing Page</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: "Poppins", sans-serif;
-    }
-
-    body {
-      background: linear-gradient(to left, #6a11cb, #2575fc);
-      color: #333;
-      line-height: 1.6;
-      animation: rainbow 8s ease infinite;
-      background-size: 400% 400%;
-    }
-
-    header {
-      text-align: center;
-      padding: 80px 20px 60px;
-      color: white;
-    }
-
-    header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      background: linear-gradient(to right, #ffcc70, #ff8177);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    header p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-    }
-
-    .btn {
-      display: inline-block;
-      margin-top: 25px;
-      padding: 12px 25px;
-      background: white;
-      color: #2575fc;
-      border-radius: 30px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-    .btn:hover {
-      background: #2575fc;
-      color: #fff;
-    }
-
-    .features {
-    background: linear-gradient(to right,#6a11cb, #2575fc);
-      border-radius: 25px 25px 0 0;
-      padding: 60px 20px;
-      text-align: center;
-      box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
-      animation: rainbow 8s ease infinite;
-      background-size: 400% 400%;
-    }
-
-    @keyframes rainbow {
-0%  {background-position: 0% 50%;}
-50%  {background-position: 100% 50%;}
-100% {background-position: 0% 50%;}
-  }
-
-    .features h2 {
-      font-size: 1.8rem;
-      margin-bottom: 40px;
-      color: #2575fc;
-    }
-
-    .features .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 25px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .feature {
-      background: #f8f8ff;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      width: 300px;
-      height: 200px;
-      border: 2px solid transparent;
-    }
-
-    .feature h3 {
-      margin-bottom: 10px;
-      color: #333;
-    }
-
-    footer {
-      text-align: center;
-      padding: 40px 10px;
-      color: white;
-      opacity: 0.8;
-    }
-
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 2rem;
-      }
-        .feature {
-      background: #f8f8ff;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      width: 90vw;
-      height: 40vh;
-      border: 2px solid transparent;
-    }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 CleanStart Box | Non-Toxic Cleaning Delivered Monthly</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <header>
-    <h1>GlowBottle</h1>
-    <p>The smart water bottle that reminds you to stay hydrated — all day, every day.</p>
-    <a href="Sign in.html" class="btn">Get one now</a>
-  </header>
+    <header class="header">
+        <div class="containerV">
+            <span class="logo">CleanStart 🌿</span>
+            <div class="containerc">
+            <a href="Sign Up/index.html"><button class="newb">Get Started</button></a>
+             <a href="Sign In/index.html"><button class="newb">Continue</button></a>
+        </div>
+        </div>
+    </header>
 
-  <section class="features">
-    <h2>Why You’ll Love It</h2>
-    <div class="grid">
-      <div class="feature">
-        <h3>💧 Smart Reminders</h3>
-        <p>GlowBottle gently lights up when it's time to drink water.</p>
-      </div>
-      <div class="feature">
-        <h3>🔋 Long Battery Life</h3>
-        <p>Lasts up to 2 weeks on a single charge — no daily charging needed.</p>
-      </div>
-      <div class="feature">
-        <h3>🌱 Eco-Friendly</h3>
-        <p>Made with sustainable materials and 100% BPA-free.</p>
-      </div>
-    </div>
-  </section>
+    <main>
+        <section class="hero">
+            <div class="container hero-content">
+                <h1>Stop Buying Harsh Chemicals. Start Cleaning Sustainably.</h1>
+                <p class="subtitle">Get effective, plant-derived, plastic-free cleaning products delivered to your door every month. No toxins, no waste.</p>
+                
+                <div class="cta-banner">
+                    <p>✨ Claim Your Starter Kit Discount Today!</p>
+                    <a href="Sign Up/index.html" class="cta-button primary-cta">Get Started & Save 25%</a>
+                </div>
 
-  <footer>
-    <p>© 2025 GlowBottle. All rights reserved.</p>
-  </footer>
-<script src="script.js">
-</script>
+                <div class="trust-badges">
+                    <span>✅ Certified Non-Toxic</span>
+                    <span>🌍 Plastic-Free Packaging</span>
+                    <span>🐰 Cruelty-Free</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>How It Works: Clean & Simple</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <span class="icon">📦</span>
+                        <h3>1. Choose Your Kit</h3>
+                        <p>Select a Starter Kit (All-Purpose, Bathroom, Kitchen) or build your own subscription box.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="icon">💧</span>
+                        <h3>2. Refill & Replenish</h3>
+                        <p>Get concentrated refill tablets/pods sent on your schedule. Just add water to your reusable bottle.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="icon">✨</span>
+                        <h3>3. Enjoy a Clean Home</h3>
+                        <p>Powerful, non-toxic formulas that work just as well as traditional cleaners, without the guilt.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <div class="container">
+                <h2>What Our Customers Are Saying</h2>
+                <div class="testimonial-card">
+                    <blockquote>"I was skeptical, but the All-Purpose spray cleans better than my old chemical stuff. Plus, my recycling bin is finally empty!"</blockquote>
+                    <p class="source">- Sarah M., San Francisco</p>
+                </div>
+                <div class="testimonial-card">
+                    <blockquote>"Love the convenience and the mission! The subscription is perfectly timed and I never run out of supplies."</blockquote>
+                    <p class="source">- David P., Austin</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="pricing-form" id="pricing-form">
+            <div class="container">
+                <h2>Choose Your CleanStart Kit</h2>
+                <div class="pricing-grid">
+                    
+                    <div class="price-card recommended">
+                        <span class="badge">BEST VALUE</span>
+                        <h3>The Essential Kit (Starter)</h3>
+                        <p class="price-tag">$29.99</p>
+                        <ul>
+                            <li>✅ 3 Reusable Spray Bottles</li>
+                            <li>✅ All-Purpose, Glass, & Bathroom Refills</li>
+                            <li>✅ FREE SHIPPING on your first order</li>
+                            <li>✅ Cancel Anytime</li>
+                        </ul>
+                        <a href="Sign Up/index.html" class="cta-button primary-cta">Get Started & Save 25%</a>
+                    </div>
+                    
+                    <div class="price-card">
+                        <h3>The Refill-Only Plan</h3>
+                        <p class="price-tag">$14.99/mo</p>
+                        <ul>
+                            <li>✅ 3 Refill Pods of Your Choice</li>
+                            <li>✅ Use Your Own Bottles</li>
+                            <li>✅ Flexible Delivery Date</li>
+                            <li>✅ Cancel Anytime</li>
+                        </ul>
+                        <a href="Sign Up/Signup.html" class="cta-button secondary-cta">Start Refilling Now</a>
+                    </div>
+
+                </div>
+                <p class="small-print">Offer valid for first-time subscribers only. Price includes first month's refill supply.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 CleanStart. Privacy Policy | Terms of Service</p>
+        </div>
+    </footer>
+
 </body>
-
 </html>

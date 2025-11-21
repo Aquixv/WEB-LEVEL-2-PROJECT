@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanStart | Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="auth-container">
+        <header class="auth-header">
+            <a href="index.html" class="logo">CleanStart 🌿</a>
+        </header>
+        
+   <div class="form-wrapper">
+    <h2>Create Your Account</h2>
+    <p>Join the movement for a cleaner, greener home. Get your Starter Kit today!</p>
+
+    <form id="signupform">
+      <div class="input-group">
+            <label for="text">Full Name</label>
+            <input type="text" id="text" name="text" required>
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <small>Must be at least 8 characters long.</small>
+        </div>
+
+        <button type="submit" class="cta-button primary-cta">Sign Up Now</button>
+    </form>
+    
+    <div class="divider">OR</div>
+    
+    <div class="social-login-group">
+        
+        <button onclick="googleSignIn()" class="cta-button secondary-cta google-btn">
+            Sign In with Google
+        </button>
+        
+        <button onclick="githubSignIn()" class="cta-button secondary-cta github-btn">
+            Sign In with GitHub
+        </button>
+        
+        <button id="nine" onclick="EmailSignIn()" class="cta-button secondary-cta github-btn">
+            Sign In with Email
+        </button>
+    </div>
+
+    <p class="switch-auth">
+       Already have an account? <a href="../Sign In/index.html">Sign In</a>
+    </p>
+</div>
+
+    </div>
+</body>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+ 
+  const firebaseConfig = {
+    apiKey: "AIzaSyCV2oi-v6yUr_riCe_iDZrCyAz-rm8EbSM",
+    authDomain: "aquii-fb-2.firebaseapp.com",
+    projectId: "aquii-fb-2",
+    storageBucket: "aquii-fb-2.firebasestorage.app",
+    databaseURL: "https://aquii-fb-2-default-rtdb.firebaseio.com",
+    messagingSenderId: "9930879852",
+    appId: "1:9930879852:web:41125e02e899c23f833949"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+  const SecondaryProvider = new GithubAuthProvider();
+
+  const googleSignIn = () => {
+    signupform.style.display = 'none';
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+      console.log(user);
+      if (user) {
+        setTimeout(() => {
+          window.location.href = "../../Projekt Dashboard/index.html";
+        }, 1000);
+      } else {
+        window.location.href = 'index.html'; 
+      }
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+       console.log(errorCode);
+      window.location.href = 'index.html'; 
+    });
+};
+   const githubSignIn = () => {
+    signupform.style.display = 'none';
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+      console.log(user);
+      if (user) {
+        setTimeout(() => {
+          window.location.href = "../../Projekt Dashboard/index.html";
+        }, 1000);
+      } else {
+        window.location.href = 'index.html'; 
+      }
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+       console.log(errorCode);
+      window.location.href = 'index.html'; 
+    });
+};
+   const EmailSignIn = () => {
+    signupform.style.display = 'block';
+    nine.style.display = 'none';
+};
+  window.googleSignIn = googleSignIn;
+  window.githubSignIn = githubSignIn;
+  window.EmailSignIn = EmailSignIn;
+</script>
+</html>

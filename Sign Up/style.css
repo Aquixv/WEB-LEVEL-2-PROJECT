@@ -1,0 +1,133 @@
+#signupform{
+display: none;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #e6f1e6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+
+.auth-container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 71, 52, 0.1); 
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+}
+
+
+.auth-header {
+    margin-bottom: 25px;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e6c4e; 
+    text-decoration: none;
+    display: block;
+}
+
+
+.form-wrapper h2 {
+    font-size: 2rem;
+    color: #0d4734; 
+    margin-bottom: 10px;
+}
+
+.form-wrapper p {
+    color: #555;
+    margin-bottom: 30px;
+}
+
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box; 
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #4CAF50; 
+    outline: none;
+}
+
+.input-group small {
+    display: block;
+    margin-top: 5px;
+    color: #777;
+    font-size: 0.85rem;
+}
+
+.cta-button {
+    width: 100%;
+    padding: 15px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+}
+
+.primary-cta {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.primary-cta:hover {
+    background-color: #388E3C;
+}
+
+.switch-auth {
+    margin-top: 25px;
+    font-size: 0.95rem;
+}
+
+.switch-auth a {
+    color: #1e6c4e;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.switch-auth a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+
+    .form-wrapper h2 {
+        font-size: 1.7rem;
+    }
+}
