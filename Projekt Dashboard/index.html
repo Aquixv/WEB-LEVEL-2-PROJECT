@@ -10,86 +10,25 @@
 <body>
 
     <div class="sidebar">
-        <div id="logo" class="logo"></div>
+         <div id="logo" class="logo"></div>
         <nav>
             <ul>
-                <li class="active"><a href="#">Dashboard</a></li>
-                <li><a href="#">Subscribers</a></li>
-                <li><a href="#">Inventory</a></li>
-                <li><a href="#">Finance</a></li>
+                <li class="active"><a href="#" data-page="dashboard">Dashboard</a></li>
+                <li><a href="#" data-page="subscribers">Subscribers</a></li>
+                <li><a href="#" data-page="inventory">Inventory</a></li>
+                <li><a href="#" data-page="finance">Finance</a></li>
             </ul>
         </nav>
     </div>
 
     <div class="main-content">
-        <header class="dashboard-header">
-            <h1>Subscription Overview</h1>
-            <div class="date-range">
-                <label for="period">Viewing:</label>
-                <select id="period">
-                    <option>Last 30 Days</option>
-                    <option>This Month</option>
-                    <option>Last Quarter</option>
-                </select>
+        <div id="page-content">
             </div>
-        </header>
-
-        <section class="kpi-cards-grid">
-            <div class="kpi-card growth">
-                <h3>Monthly Recurring Revenue (MRR)</h3>
-                <p class="metric-value">$8,540.00</p>
-                <span class="change positive">▲ 12% vs last month</span>
-            </div>
-
-            <div class="kpi-card subscribers">
-                <h3>Active Subscribers</h3>
-                <p class="metric-value">427</p>
-                <span class="change positive">▲ 35 new this month</span>
-            </div>
-
-            <div class="kpi-card churn">
-                <h3>Churn Rate</h3>
-                <p class="metric-value">4.5%</p>
-                <span class="change negative">▼ 0.5% vs last month</span>
-            </div>
-        </section>
-
-        <section class="detail-sections">
-            
-            <div class="detail-panel inventory">
-                <h2>📦 Inventory Status</h2>
-                <table>
-                    <thead>
-                        <tr><th>Item</th><th>Stock Level</th><th>Reorder Point</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>All-Purpose Refills</td><td>**1,200 units**</td><td class="alert">1,500 units</td></tr>
-                        <tr><td>Kitchen Refills</td><td>2,850 units</td><td>1,500 units</td></tr>
-                        <tr><td>Essential Kit Bottles</td><td>450 units</td><td class="alert">500 units</td></tr>
-                    </tbody>
-                </table>
-                <p class="note">Next major fulfillment run: **Nov 25th**</p>
-            </div>
-
-            <div class="detail-panel financials">
-                <h2>💰 Key Financials</h2>
-                <div class="financial-metrics">
-                    <div class="metric-box">
-                        <p class="box-label">Average Order Value (AOV)</p>
-                        <p class="box-value">$24.50</p>
-                    </div>
-                    <div class="metric-box">
-                        <p class="box-label">Customer Lifetime Value (CLV)</p>
-                        <p class="box-value">$150.00 (Est.)</p>
-                    </div>
-                </div>
-            </div>
-            
-        </section>
-<button class="thinktext" onclick = "signout()">Log out</button>
     </div>
+
+    <script src="dashboard.js"></script>
 </body>
-<script type="module">
+<script type="module" src="script.js">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
  

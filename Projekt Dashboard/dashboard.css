@@ -205,7 +205,14 @@ body {
     .sidebar {
         width: 200px;
     }
-
+.thinktext{
+    background-color: #0d4734;
+    height: 40px;
+    width: 30%;
+    border-radius: 5px;
+    border: none;
+    margin-top: 3vh;
+}
     .main-content {
         padding: 20px;
     }
@@ -215,7 +222,14 @@ body {
     body {
         flex-direction: column;
     }
-
+.thinktext{
+    background-color: #0d4734;
+    height: 40px;
+    width: 30%;
+    border-radius: 5px;
+    border: none;
+    margin-top: 3vh;
+}
     .sidebar {
         width: 100%;
         height: auto;
@@ -247,5 +261,237 @@ body {
 
     .kpi-cards-grid {
         flex-direction: column;
+    }
+}
+/* --- Global Changes for Wider Dashboard --- */
+.sidebar {
+    width: 280px; /* Slightly Wider Sidebar */
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 40px; /* Increased padding */
+}
+
+/* --- KPI Cards Grid --- */
+.kpi-cards-grid {
+    gap: 30px; /* Increased gap */
+}
+
+.kpi-card {
+    padding: 30px; /* Increased padding */
+    border-left: 5px solid #4CAF50; /* Add a strong brand color accent */
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08); /* Stronger shadow */
+    min-width: 250px;
+}
+
+.metric-value {
+    font-size: 3rem; /* Larger metrics */
+}
+
+/* --- New Chart Section Styles --- */
+.charts-area {
+    margin-bottom: 30px;
+}
+
+.chart-panel {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.chart-placeholder {
+    height: 350px; /* Allocate space for a large chart */
+    background-color: #f7f7f7; 
+    border-radius: 4px;
+    display: flex; /* For centering image placeholder */
+    justify-content: center;
+    align-items: center;
+    color: #999;
+    font-style: italic;
+    font-size: 1.2rem;
+}
+
+/* --- Detail Panel Styling --- */
+.detail-panel {
+    padding: 30px; /* Increased padding */
+}
+
+/* --- Responsiveness --- */
+@media (max-width: 992px) {
+    /* ... existing styles ... */
+    .sidebar {
+        width: 250px; /* Default sidebar width on tablet */
+    }
+}
+/* ... (Existing styles remain the same above this point) ... */
+
+/* --- Responsiveness --- */
+
+/* 1. Tablet View (Max 992px) */
+@media (max-width: 992px) {
+    /* Keep the sidebar on the side, but shrink it slightly */
+    .sidebar {
+        width: 200px;
+    }
+
+    .main-content {
+        padding: 25px;
+    }
+
+    /* Allow KPI cards to wrap to two per row if needed */
+    .kpi-cards-grid {
+        gap: 15px;
+    }
+    
+    .kpi-card {
+        flex: 1 1 calc(50% - 15px); /* Allows two cards per row with a gap */
+        min-width: unset; /* Remove minimum width constraint */
+    }
+
+    /* Stack detail panels vertically */
+    .detail-sections {
+        flex-direction: column;
+        gap: 25px;
+    }
+    
+    .chart-placeholder {
+        height: 300px; 
+    }
+}
+
+/* 2. Mobile View (Max 768px) */
+@media (max-width: 768px) {
+    /* Stack the sidebar and main content vertically */
+    body {
+        flex-direction: column;
+    }
+
+    /* Sidebar takes full width and changes to a top navigation bar */
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 15px 20px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .sidebar .logo {
+        text-align: center;
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    /* Change sidebar links to horizontal navigation */
+    .sidebar nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-top: 15px;
+    }
+    
+    .sidebar nav li {
+        flex: 1;
+        text-align: center;
+        margin: 5px 0;
+    }
+    
+    .sidebar nav li a {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+
+
+    /* Main content flow */
+    .main-content {
+        padding: 15px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    /* KPI cards stack fully vertically */
+    .kpi-cards-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .kpi-card {
+        flex: 1 1 100%; /* Full width for each card */
+    }
+    
+    .metric-value {
+        font-size: 2rem;
+    }
+
+    /* Financial metrics stack vertically */
+    .financial-metrics {
+        flex-direction: column;
+    }
+}
+.data-table-placeholder table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.data-table-placeholder th, .data-table-placeholder td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.data-table-placeholder th {
+    background-color: #f0f8f0; /* Light green header */
+    color: #0d4734;
+    font-weight: 600;
+}
+
+.data-table-placeholder tr:last-child td {
+    border-bottom: none;
+}
+
+/* Specific Inventory Table Styling */
+#inventory-table td.alert {
+    color: #D32F2F !important; /* Ensure red alert color is applied */
+    font-weight: bold;
+}
+/* --- Table Responsiveness Fix (Place at the end of dashboard.css) --- */
+@media (max-width: 768px) {
+    /* Container that forces horizontal scrolling if table is too wide */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto; /* Enable horizontal scrolling */
+        -webkit-overflow-scrolling: touch; /* Better scrolling on iOS */
+    }
+
+    /* Ensure the table itself does not try to shrink too much */
+    .data-table-placeholder table {
+        /* Set a minimum width that forces scrolling on tiny screens */
+        min-width: 600px; 
+    }
+}
+@media (max-width: 768px) {
+    /* Container that forces horizontal scrolling if table is too wide */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto; /* This enables the horizontal scrollbar */
+        -webkit-overflow-scrolling: touch; 
+    }
+
+    /* This forces the table to maintain a minimum width so the scrollbar appears */
+    .data-table-placeholder table {
+        min-width: 600px; 
     }
 }
