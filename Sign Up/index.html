@@ -116,6 +116,7 @@ const SecondaryProvider = new TwitterAuthProvider();
     });
 };
 const XSignIn = () => {
+  signupform.style.display = 'none';
   signInWithPopup(auth, SecondaryProvider)
     .then((result) => {
       const user = result.user;
