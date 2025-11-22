@@ -115,6 +115,25 @@
       window.location.href = 'index.html'; 
     });
 };
+const XSignIn = () => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+      console.log(user);
+      if (user) {
+        setTimeout(() => {
+          window.location.href = "../../Projekt Dashboard/index.html";
+        }, 1000);
+      } else {
+        window.location.href = 'index.html'; 
+      }
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+       console.log(errorCode);
+      window.location.href = 'index.html'; 
+    });
+};
 //    const githubSignIn = () => {
 //     signupform.style.display = 'none';
 //   signInWithPopup(auth, provider)
@@ -143,5 +162,6 @@
   window.googleSignIn = googleSignIn;
   // window.githubSignIn = githubSignIn;
   window.EmailSignIn = EmailSignIn;
+  window.XSignIn = XSignIn;
 </script>
 </html>

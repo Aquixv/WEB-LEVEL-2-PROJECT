@@ -90,7 +90,7 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
-  const SecondaryProvider = new GithubAuthProvider();
+  const SecondaryProvider = new TwitterAuthProvider();
 
   const googleSignIn = () => {
   signInWithPopup(auth, provider)
@@ -136,7 +136,7 @@
     o.style.display = 'block';
 };
 const XSignIn = () => {
-  signInWithPopup(auth, provider)
+  signInWithPopup(auth, SecondaryProvider)
     .then((result) => {
       const user = result.user;
       console.log(user);

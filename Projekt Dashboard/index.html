@@ -10,7 +10,7 @@
 <body>
 
     <div class="sidebar">
-         <div id="logo" class="logo"></div>
+         <div id="show"></div>
         <nav>
             <ul>
                 <li class="active"><a href="#" data-page="dashboard">Dashboard</a></li>
@@ -24,8 +24,8 @@
     <div class="main-content">
         <div id="page-content">
             </div>
+            <button onclick = "signout()">Log out</button>
     </div>
-
     <script src="dashboard.js"></script>
 </body>
 <script type="module" src="script.js">
@@ -48,7 +48,7 @@
   onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log(user);
-        logo.innerHTML += `
+        show.innerHTML += `
         <img src ="${user.photoURL}" alt= "DP" width='100'
         style = "border-radius:100%"/>
         <h3> Name: ${user.displayName} </h3>
@@ -70,8 +70,7 @@ signOut(auth).then(() => {
     }, 1000)
 }).catch((error) => {
 });
-}
+}; 
 window.signout = signout;
 </script>
-</html>
 </html>
