@@ -78,7 +78,7 @@
 </body>
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, TwitterAuthProvider } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
  
   const firebaseConfig = {
     apiKey: "AIzaSyCV2oi-v6yUr_riCe_iDZrCyAz-rm8EbSM",
@@ -93,7 +93,7 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
-  const SecondaryProvider = new GithubAuthProvider();
+const SecondaryProvider = new TwitterAuthProvider();
 
   const googleSignIn = () => {
     signupform.style.display = 'none';
@@ -116,7 +116,7 @@
     });
 };
 const XSignIn = () => {
-  signInWithPopup(auth, provider)
+  signInWithPopup(auth, SecondaryProvider)
     .then((result) => {
       const user = result.user;
       console.log(user);
