@@ -23,7 +23,40 @@ body {
     width: 90%;
     text-align: center;
 }
+.cta-button {
+    width: 100%;
+    padding: 15px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+}
 
+ .google-btn{
+background-color: lightblue;
+color: white;
+/* border: 1px solid black; */
+}
+/* .github-btn{
+background-color: black;
+color: white;
+} */
+ .email-btn{
+background-color: rgb(199, 26, 26);
+color: white;
+}
+ .Fb-btn{
+background-color: rgb(17, 17, 210);
+color: white;
+}
+ .X-btn{
+background-color: black;
+color: white;
+}
 
 .auth-header {
     margin-bottom: 25px;
@@ -84,18 +117,6 @@ body {
     font-size: 0.85rem;
 }
 
-.cta-button {
-    width: 100%;
-    padding: 15px;
-    text-decoration: none;
-    font-weight: 600;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-    font-size: 1.1rem;
-    cursor: pointer;
-    border: none;
-    margin-top: 10px;
-}
 
 .primary-cta {
     background-color: #4CAF50;
@@ -120,7 +141,22 @@ body {
 .switch-auth a:hover {
     text-decoration: underline;
 }
-
+.divider{
+    display: none;
+}
+.secondary-cta {
+    width: 15%;
+    height: 10%;
+    padding: 15px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+}
 @media (max-width: 480px) {
     .auth-container {
         padding: 30px 20px;

@@ -96,7 +96,27 @@ body {
     border: none;
     margin-top: 10px;
 }
-
+ .google-btn{
+background-color: lightblue;
+color: white;
+/* border: 1px solid black; */
+}
+.github-btn{
+background-color: black;
+color: white;
+}
+ .email-btn{
+background-color: rgb(199, 26, 26);
+color: white;
+}
+ .Fb-btn{
+background-color: blue;
+color: white;
+}
+ .X-btn{
+background-color: black;
+color: white;
+}
 .primary-cta {
     background-color: #4CAF50; 
     color: white;
@@ -120,7 +140,22 @@ body {
 .switch-auth a:hover {
     text-decoration: underline;
 }
-
+.divider{
+    display: none;
+}
+.secondary-cta {
+    width: 15%;
+    height: 10%;
+    padding: 15px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+}
 
 @media (max-width: 480px) {
     .auth-container {
