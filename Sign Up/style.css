@@ -6,11 +6,15 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-    background-color: #e6f1e6;
+   background-color: #0d4734;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+}
+.recycle-icon {
+    font-size: 2.5rem;
+    color: #4CAF50;
 }
 
 
@@ -35,7 +39,50 @@ body {
     border: none;
     margin-top: 10px;
 }
+/* --- New Auth Options Styling --- */
+.options-container {
+    display: flex;
+    justify-content: space-between; /* Pushes remember me left, forgot link right */
+    align-items: center;
+    margin-bottom: 25px; /* Space above the Sign In button */
+    font-size: 0.95rem;
+}
 
+/* Style the checkbox container */
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    accent-color: #4CAF50; /* Uses the brand green color for the checkbox */
+    cursor: pointer;
+}
+
+/* Style the Forgot Password link */
+.forgot-link {
+    color: #1e6c4e; /* Medium Green */
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: #0d4734; /* Darker Green on hover */
+    text-decoration: underline;
+}
+
+/* Mobile adjustments (to be safe) */
+@media (max-width: 480px) {
+    .options-container {
+        flex-direction: column; /* Stack vertically if space is very tight */
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
  .google-btn{
 background-color: lightblue;
 color: white;

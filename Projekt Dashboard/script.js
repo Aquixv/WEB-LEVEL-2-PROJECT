@@ -1,6 +1,6 @@
-// --- 1. PLACEHOLDER DATA (MOCK API RESPONSE) ---
+
 const dashboardData = {
-    // Data for the main dashboard view
+
     metrics: {
         mrr: 8540.00,
         mrrChange: 0.12, // 12%

@@ -1,12 +1,20 @@
-/* --- Base Reset and Typography --- */
+
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f7f9; /* Light background for admin panel */
+    background-color: #f4f7f9;
     color: #333;
-    display: flex; /* Setup for sidebar/main content layout */
+    display: flex; 
     min-height: 100vh;
+}
+.signout{
+background-color: #0d4734;
+height: 5vh;
+width: 5vw;
+margin-top: 10px;
+border: none;
+border-radius:4px;
 }
 .thinktext{
     background-color: #0d4734;
@@ -17,10 +25,10 @@ body {
     margin-top: 3vh;
 }
 
-/* --- Sidebar Styles --- */
+
 .sidebar {
     width: 250px;
-    background-color: #0d4734; /* Dark Green */
+    background-color: #0d4734; 
     color: #ffffff;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
@@ -31,7 +39,6 @@ body {
     font-weight: 400;
     margin-bottom: 30px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    /* padding-bottom: 15px; */
     line-break: 50%;
 }
 
@@ -51,11 +58,10 @@ body {
 
 .sidebar nav li.active a,
 .sidebar nav li a:hover {
-    background-color: #1e6c4e; /* Medium Green for active state */
+    background-color: #1e6c4e;
     color: #ffffff;
 }
 
-/* --- Main Content Layout --- */
 .main-content {
     flex-grow: 1;
     padding: 30px;
@@ -82,7 +88,6 @@ body {
     font-size: 1rem;
 }
 
-/* --- KPI Cards Grid --- */
 .kpi-cards-grid {
     display: flex;
     gap: 20px;
@@ -96,7 +101,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     flex: 1;
-    min-width: 200px; /* Ensures cards don't get too narrow */
+    min-width: 200px; 
 }
 
 .kpi-card h3 {
@@ -117,14 +122,13 @@ body {
 }
 
 .change.positive {
-    color: #388E3C; /* Green for growth */
+    color: #388E3C; 
 }
 
 .change.negative {
-    color: #D32F2F; /* Red for churn/loss */
+    color: #D32F2F; 
 }
 
-/* --- Detail Panels --- */
 .detail-sections {
     display: flex;
     gap: 30px;
@@ -145,7 +149,6 @@ body {
     text-align: left;
 }
 
-/* Inventory Table */
 .inventory table {
     width: 100%;
     border-collapse: collapse;
@@ -164,11 +167,10 @@ body {
 }
 
 .inventory td.alert {
-    color: #D32F2F; /* Red for low stock/alert */
+    color: #D32F2F; 
     font-weight: 600;
 }
 
-/* Financial Metrics */
 .financial-metrics {
     display: flex;
     justify-content: space-around;
@@ -196,7 +198,6 @@ body {
     color: #0d4734;
 }
 
-/* --- Responsiveness --- */
 @media (max-width: 992px) {
     .detail-sections {
         flex-direction: column;
@@ -263,33 +264,31 @@ body {
         flex-direction: column;
     }
 }
-/* --- Global Changes for Wider Dashboard --- */
+
 .sidebar {
-    width: 280px; /* Slightly Wider Sidebar */
+    width: 280px; 
 }
 
 .main-content {
     flex-grow: 1;
-    padding: 40px; /* Increased padding */
+    padding: 40px; 
 }
 
-/* --- KPI Cards Grid --- */
 .kpi-cards-grid {
-    gap: 30px; /* Increased gap */
+    gap: 30px; 
 }
 
 .kpi-card {
-    padding: 30px; /* Increased padding */
-    border-left: 5px solid #4CAF50; /* Add a strong brand color accent */
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08); /* Stronger shadow */
+    padding: 30px; 
+    border-left: 5px solid #4CAF50; 
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08); 
     min-width: 250px;
 }
 
 .metric-value {
-    font-size: 3rem; /* Larger metrics */
+    font-size: 3rem; 
 }
 
-/* --- New Chart Section Styles --- */
 .charts-area {
     margin-bottom: 30px;
 }
@@ -302,10 +301,10 @@ body {
 }
 
 .chart-placeholder {
-    height: 350px; /* Allocate space for a large chart */
+    height: 350px; 
     background-color: #f7f7f7; 
     border-radius: 4px;
-    display: flex; /* For centering image placeholder */
+    display: flex; 
     justify-content: center;
     align-items: center;
     color: #999;
@@ -313,25 +312,20 @@ body {
     font-size: 1.2rem;
 }
 
-/* --- Detail Panel Styling --- */
+
 .detail-panel {
-    padding: 30px; /* Increased padding */
+    padding: 30px; 
 }
 
-/* --- Responsiveness --- */
+
 @media (max-width: 992px) {
-    /* ... existing styles ... */
     .sidebar {
-        width: 250px; /* Default sidebar width on tablet */
+        width: 250px; 
     }
 }
-/* ... (Existing styles remain the same above this point) ... */
 
-/* --- Responsiveness --- */
 
-/* 1. Tablet View (Max 992px) */
 @media (max-width: 992px) {
-    /* Keep the sidebar on the side, but shrink it slightly */
     .sidebar {
         width: 200px;
     }
@@ -340,17 +334,15 @@ body {
         padding: 25px;
     }
 
-    /* Allow KPI cards to wrap to two per row if needed */
     .kpi-cards-grid {
         gap: 15px;
     }
     
     .kpi-card {
-        flex: 1 1 calc(50% - 15px); /* Allows two cards per row with a gap */
-        min-width: unset; /* Remove minimum width constraint */
+        flex: 1 1 calc(50% - 15px); 
+        min-width: unset;
     }
 
-    /* Stack detail panels vertically */
     .detail-sections {
         flex-direction: column;
         gap: 25px;
@@ -361,14 +353,11 @@ body {
     }
 }
 
-/* 2. Mobile View (Max 768px) */
 @media (max-width: 768px) {
-    /* Stack the sidebar and main content vertically */
     body {
         flex-direction: column;
     }
 
-    /* Sidebar takes full width and changes to a top navigation bar */
     .sidebar {
         width: 100%;
         height: auto;
@@ -383,7 +372,6 @@ body {
         padding-bottom: 0;
     }
 
-    /* Change sidebar links to horizontal navigation */
     .sidebar nav ul {
         display: flex;
         flex-wrap: wrap;
@@ -403,7 +391,6 @@ body {
     }
 
 
-    /* Main content flow */
     .main-content {
         padding: 15px;
     }
@@ -418,21 +405,19 @@ body {
         margin-bottom: 10px;
     }
 
-    /* KPI cards stack fully vertically */
     .kpi-cards-grid {
         flex-direction: column;
         gap: 20px;
     }
     
     .kpi-card {
-        flex: 1 1 100%; /* Full width for each card */
+        flex: 1 1 100%; 
     }
     
     .metric-value {
         font-size: 2rem;
     }
 
-    /* Financial metrics stack vertically */
     .financial-metrics {
         flex-direction: column;
     }
@@ -453,7 +438,7 @@ body {
 }
 
 .data-table-placeholder th {
-    background-color: #f0f8f0; /* Light green header */
+    background-color: #f0f8f0;
     color: #0d4734;
     font-weight: 600;
 }
@@ -462,35 +447,28 @@ body {
     border-bottom: none;
 }
 
-/* Specific Inventory Table Styling */
 #inventory-table td.alert {
-    color: #D32F2F !important; /* Ensure red alert color is applied */
+    color: #D32F2F !important; 
     font-weight: bold;
 }
-/* --- Table Responsiveness Fix (Place at the end of dashboard.css) --- */
+
 @media (max-width: 768px) {
-    /* Container that forces horizontal scrolling if table is too wide */
     .table-responsive {
         width: 100%;
-        overflow-x: auto; /* Enable horizontal scrolling */
-        -webkit-overflow-scrolling: touch; /* Better scrolling on iOS */
+        overflow-x: auto; 
+        -webkit-overflow-scrolling: touch; 
     }
-
-    /* Ensure the table itself does not try to shrink too much */
     .data-table-placeholder table {
-        /* Set a minimum width that forces scrolling on tiny screens */
         min-width: 600px; 
     }
 }
 @media (max-width: 768px) {
-    /* Container that forces horizontal scrolling if table is too wide */
     .table-responsive {
         width: 100%;
-        overflow-x: auto; /* This enables the horizontal scrollbar */
+        overflow-x: auto; 
         -webkit-overflow-scrolling: touch; 
     }
 
-    /* This forces the table to maintain a minimum width so the scrollbar appears */
     .data-table-placeholder table {
         min-width: 600px; 
     }

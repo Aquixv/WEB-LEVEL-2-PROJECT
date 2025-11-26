@@ -7,12 +7,13 @@
     <title>CleanStart | Sign Up</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <body>
 
     <div class="auth-container">
         <header class="auth-header">
-            <a href="index.html" class="logo">CleanStart 🌿</a>
+          <i class="fas fa-recycle recycle-icon"></i>
+            <a href="index.html" class="logo">CleanStart</a>
         </header>
         
    <div class="form-wrapper">
@@ -35,8 +36,7 @@
             <input type="password" id="password" name="password" required>
             <small>Must be at least 8 characters long.</small>
         </div>
-
-        <button type="submit" class="cta-button primary-cta">Sign Up Now</button>
+        <button type="submit" id="signUpButton" class="cta-button primary-cta">Sign Up Now</button>
     </form>
     
     <div class="divider" id="go">OR</div>
@@ -78,7 +78,7 @@
 </body>
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, TwitterAuthProvider } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, TwitterAuthProvider, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
  
   const firebaseConfig = {
     apiKey: "AIzaSyCV2oi-v6yUr_riCe_iDZrCyAz-rm8EbSM",
@@ -155,14 +155,44 @@ const XSignIn = () => {
 //       window.location.href = 'index.html'; 
 //     });
 // };
-   const EmailSignIn = () => {
+const EmailSignIn = (email, password) => {
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((result) => {
+      const user = result.user;
+      console.log(user);
+      if (user) {
+        setTimeout(() => {
+          window.location.href = "../../Projekt Dashboard/index.html";
+        }, 1000);
+      } else {
+        window.location.href = 'index.html'; 
+      }
+    })
+        .catch((error) => {
+           const errorCode = error.code;
+       console.log(errorCode);
+      // window.location.href = 'index.html';
+        });
     signupform.style.display = 'block';
     nine.style.display = 'none';
     go.style.display = 'block';
-};
+    };
   window.googleSignIn = googleSignIn;
   // window.githubSignIn = githubSignIn;
   window.EmailSignIn = EmailSignIn;
   window.XSignIn = XSignIn;
+
+const signUpForm = document.getElementById('signupform');
+
+signUpForm.addEventListener('submit', (event) => {
+    event.preventDefault(); 
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    EmailSignIn(email, password);
+});
+
 </script>
+<script src="script.js"></script>
 </html>

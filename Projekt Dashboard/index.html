@@ -24,11 +24,10 @@
     <div class="main-content">
         <div id="page-content">
             </div>
-            <button onclick = "signout()">Log out</button>
+            <button class="signout" onclick = "signout()">Log out</button>
     </div>
-    <script src="dashboard.js"></script>
 </body>
-<script type="module" src="script.js">
+<script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
  
@@ -66,11 +65,15 @@
 signOut(auth).then(() => {
     console.log('user is signed out');
     setTimeout(() => {
-        window.location.href = './index.html'
+        window.location.href = 'index.html'
     }, 1000)
 }).catch((error) => {
+    //an error happened.
 });
-}; 
+}
 window.signout = signout;
+</script>
+<script src="script.js">
+    
 </script>
 </html>
