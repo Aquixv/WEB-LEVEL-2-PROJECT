@@ -357,7 +357,6 @@ text-decoration: none;
         flex-direction: row;
         justify-content: space-around;
         padding: 15px 0;
-        margin-left: 10vw;
         z-index: 10;
         box-shadow: 0 5px 10px rgba(0,0,0,0.3);
     }
