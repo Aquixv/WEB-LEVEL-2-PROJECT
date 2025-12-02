@@ -1,8 +1,47 @@
-// --- 1. PLACEHOLDER DATA & INITIAL SETUP ---
-// We keep data minimal, as it will be replaced by Firebase data later.
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+ 
+  const firebaseConfig = {
+    apiKey: "AIzaSyCV2oi-v6yUr_riCe_iDZrCyAz-rm8EbSM",
+    authDomain: "aquii-fb-2.firebaseapp.com",
+    projectId: "aquii-fb-2",
+    databaseURL: "https://aquii-fb-2-default-rtdb.firebaseio.com",
+    storageBucket: "aquii-fb-2.firebasestorage.app",
+    messagingSenderId: "9930879852",
+    appId: "1:9930879852:web:41125e02e899c23f833949"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log(user);
+        userprofile.innerHTML += `
+        <img src ="${user.photoURL}" alt= "DP" width='100'
+        style = "border-radius:100%"/>
+        <h3>${user.displayName}</h3>`
+        redmi.innerHTML += `${user.displayName}`
+    } else{
+        setTimeout(() => {
+            window.location.href = "../index.html";
+        }, 1000)
+        }
+    }
+  );
+  const signout = () => {
+signOut(auth).then(() => {
+    console.log('user is signed out');
+    setTimeout(() => {
+        window.location.href = 'index.html'
+    }, 1000)
+}).catch((error) => {
+    //an error happened.
+});
+}
+window.signout = signout;
 
 const dashboardData = {
-    user: "Lolita",
     currentStreak: 14,
     totalRecycled: "1,540 kg",
     metrics: { 
@@ -20,14 +59,14 @@ const navLinks = document.querySelectorAll('.sidebar a');
 // A. Welcome Template (Simple Greeting)
 const welcomeTemplate = `
     <header class="dashboard-header" style="background:none; box-shadow:none;">
-        <h1 style="font-size: 2.5rem;">Welcome back, ${dashboardData.user}!</h1>
+        <h1 style="font-size: 2.5rem;">Welcome back, <span id="redmi"></span>!</h1>
     </header>
     <div class="kpi-card" style="padding: 40px;">
         <p style="font-size: 1.5rem; margin-bottom: 15px; color: var(--color-light-text);">
             Your current recycling streak is <span style="color: var(--color-accent-green); font-weight: 700;">${dashboardData.currentStreak} days</span>!
         </p>
         <p style="font-size: 1.1rem; color: #b0d9b0;">
-            Keep up the incredible work. Head over to the **Metrics** page to see your progress or the **Tracker** to log your next recycle run.
+            Keep up the incredible work. Head over to the Metrics page to see your progress or the Tracker to log your next recycle run.
         </p>
     </div>
 `;
@@ -106,6 +145,7 @@ const settingsTemplate = `
             Manage your profile, notification preferences, and privacy settings here.
         </p>
     </div>
+    <button class="signout-btn" onclick="signout()"><a href="#" data-page="logout"><i class="fas fa-sign-out-alt"></i></a></button>
 `;
 
 
