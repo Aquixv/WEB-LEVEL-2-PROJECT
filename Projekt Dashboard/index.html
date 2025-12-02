@@ -6,25 +6,38 @@
     <title>CleanStart Box - Dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
     <div class="sidebar">
-         <div id="show"></div>
-        <nav>
-            <ul>
-                <li class="active"><a href="#" data-page="dashboard">Dashboard</a></li>
-                <li><a href="#" data-page="subscribers">Subscribers</a></li>
-                <li><a href="#" data-page="inventory">Inventory</a></li>
-                <li><a href="#" data-page="finance">Finance</a></li>
-            </ul>
-        </nav>
+        <i class="fas fa-recycle recycle-icon" style="color: white; font-size: 2rem;"></i>
+       <nav>
+    <ul>
+        <li class="active"><a href="#" data-page="welcome"><i class="fas fa-home"></i></a></li>
+        <li><a href="#" data-page="metrics"><i class="fas fa-chart-line"></i></a></li>
+        <li><a href="#" data-page="tracker"><i class="fas fa-recycle"></i></a></li>
+        <li><a href="#" data-page="settings"><i class="fas fa-cog"></i></a></li>
+         <button class="signout" onclick="signout()"><a href="#" data-page="logout"><i class="fas fa-sign-out-alt"></i></a></button>
+    </ul>
+</nav>
     </div>
 
     <div class="main-content">
-        <div id="page-content">
+        <header class="dashboard-header">
+            <h2>RecycleOn</h2>
+            <div class="top-stats-group">
+                <span data-stat="members"><i class="fas fa-user-friends"></i> 3259 Members</span>
+                <span data-stat="co2"><i class="fas fa-cloud-sun"></i> 500g CO2 saved</span>
+                <span data-stat="containers"><i class="fas fa-box"></i> 3259 Containers</span>
             </div>
-            <button class="signout" onclick = "signout()">Log out</button>
+            <div id="userprofile" class="userprofile">
+                
+            </div>
+        </header>
+
+        <div id="page-content" class="content-grid">
+            </div>
     </div>
 </body>
 <script type="module">
@@ -47,12 +60,11 @@
   onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log(user);
-        show.innerHTML += `
+        userprofile.innerHTML += `
         <img src ="${user.photoURL}" alt= "DP" width='100'
         style = "border-radius:100%"/>
-        <h3> Name: ${user.displayName} </h3>
-        <h3> Email: ${user.email} </h3>
-        <p>CleanStart Admin</p>
+        <h3>${user.displayName} </h3>
+        
         `
     } else{
         setTimeout(() => {
@@ -73,7 +85,6 @@ signOut(auth).then(() => {
 }
 window.signout = signout;
 </script>
-<script src="script.js">
-    
+<script src="script.js" type="module">
 </script>
 </html>

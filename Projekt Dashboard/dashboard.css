@@ -1,475 +1,373 @@
+/* --- Color Variables --- */
+:root {
+    --color-dark-base: #0a3627; /* Dark Teal/Green Base */
+    --color-darker: #062319; /* Sidebar Background */
+    --color-card-bg: #114b3d; /* Card Background */
+    --color-accent-green: #4CAF50; /* Bright Green */
+    --color-light-text: #e8f5e9; /* Off-White/Light Text */
+    --color-warm-accent: #f8961e; /* Warm Orange Accent (for growth/highlights) */
+    --border-radius-lg: 18px; /* Large Rounded Corners */
+}
 
+/* --- Base Reset and Typography --- */
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f7f9;
-    color: #333;
-    display: flex; 
+    background-color: var(--color-dark-base); 
+    color: var(--color-light-text);
+    display: flex;
     min-height: 100vh;
 }
-.signout{
-background-color: #0d4734;
-height: 5vh;
-width: 5vw;
-margin-top: 10px;
-border: none;
-border-radius:4px;
-}
-.thinktext{
-    background-color: #0d4734;
-    height: 8vh;
-    width: 5vw;
-    border-radius: 10%;
-    border: none;
-    margin-top: 3vh;
+
+h1, h2, h3 {
+    font-weight: 600;
+    color: var(--color-light-text);
+    margin: 0;
 }
 
-
+/* --- Sidebar Styles (Left Navigation Bar) --- */
 .sidebar {
-    width: 250px;
-    background-color: #0d4734; 
-    color: #ffffff;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    width: 90px; /* Narrow width like the concept */
+    background-color: var(--color-darker); 
+    padding: 30px 0;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
 }
 
 .sidebar .logo {
-    font-size: 1rem;
-    font-weight: 400;
-    margin-bottom: 30px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    line-break: 50%;
+    font-size: 1.5rem;
+    color: var(--color-accent-green);
+    margin-bottom: 20px;
+    display: none; /* Hide text logo on narrow bar */
+}
+
+.sidebar nav {
+    flex-grow: 1; /* Pushes the last item (logout) to the bottom */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .sidebar nav ul {
     list-style: none;
     padding: 0;
+    width: 100%;
+}
+
+.sidebar nav li {
+    text-align: center;
+    margin: 10px 0;
 }
 
 .sidebar nav li a {
-    display: block;
-    padding: 10px 15px;
-    text-decoration: none;
-    color: #b3d9c7;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    font-size: 1.5rem;
+    color: var(--color-light-text);
+    border-radius: 50%; /* Circular buttons */
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .sidebar nav li.active a,
 .sidebar nav li a:hover {
-    background-color: #1e6c4e;
-    color: #ffffff;
+    background-color: var(--color-accent-green);
+    color: var(--color-darker);
 }
 
+/* --- Main Content Layout --- */
 .main-content {
     flex-grow: 1;
     padding: 30px;
-}
-
-.dashboard-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 15px;
-}
-
-.dashboard-header h1 {
-    font-size: 2rem;
-    color: #0d4734;
-}
-
-.date-range select {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-.kpi-cards-grid {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-}
-
-.kpi-card {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    flex: 1;
-    min-width: 200px; 
-}
-
-.kpi-card h3 {
-    font-size: 1rem;
-    color: #777;
-    margin-bottom: 10px;
-}
-
-.metric-value {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin: 5px 0;
-}
-
-.change {
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.change.positive {
-    color: #388E3C; 
-}
-
-.change.negative {
-    color: #D32F2F; 
-}
-
-.detail-sections {
-    display: flex;
+    flex-direction: column;
     gap: 30px;
 }
 
-.detail-panel {
-    background-color: #ffffff;
+/* --- Top Header Bar (RecycleOn Stats Bar) --- */
+.dashboard-header {
+    background-color: var(--color-card-bg);
+    padding: 15px 30px;
+    border-radius: var(--border-radius-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.top-stats-group {
+    display: flex;
+    gap: 40px;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.top-stats-group span i {
+    color: var(--color-accent-green);
+    margin-right: 8px;
+}
+
+.userprofile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.userprofile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--color-accent-green);
+}
+.signout{
+background-color: transparent;
+border: none;
+font-size: small;
+}
+/* --- Main Content Grid (KPIs, Charts, Transactions) --- */
+.content-grid {
+    display: grid;
+    /* Defines the layout: 4 columns, adjust widths based on content needs */
+    grid-template-columns: 1.5fr 1fr 1fr; 
+    grid-template-rows: auto auto auto;
+    gap: 20px;
+}
+
+.content-grid .kpi-card {
+    background-color: var(--color-card-bg);
     padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Positioning cards in the grid */
+.guide-card {
+    grid-column: 1 / 2; /* Spans 1st column */
+}
+
+.packages-card {
+    grid-column: 2 / 3; /* Spans 2nd column */
+}
+
+.materials-card {
+    grid-column: 3 / 4; /* Spans 3rd column */
+    grid-row: 1 / 3; /* Spans two rows */
+}
+
+.visits-card {
+    grid-column: 1 / 3; /* Spans 1st and 2nd columns */
+}
+
+.transactions-card {
+    grid-column: 3 / 4; /* Spans 3rd column */
+    grid-row: 3 / 4; /* Takes up the 3rd row below materials */
+}
+
+/* --- General Card Styling --- */
+.kpi-card h2 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: var(--color-light-text);
+}
+
+/* --- Guide Card Mockup (Recycling Guidelines) --- */
+.guide-card {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.guide-text {
     flex: 1;
 }
 
-.detail-panel h2 {
-    font-size: 1.5rem;
-    color: #1e6c4e;
+.guide-text p {
+    color: #b0d9b0;
     margin-bottom: 20px;
-    text-align: left;
 }
 
-.inventory table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 15px;
+.guide-image {
+    width: 150px;
+    height: 150px;
+    background-color: #388E3C;
+    border-radius: 10px;
+    /* Replace with image/illustration later */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    text-align: center;
+    color: white;
 }
 
-.inventory th, .inventory td {
-    padding: 10px 0;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-.inventory th {
-    font-weight: 600;
-    color: #555;
-}
-
-.inventory td.alert {
-    color: #D32F2F; 
-    font-weight: 600;
-}
-
-.financial-metrics {
+/* --- Recycled Packages Chart Mockup --- */
+.chart-container {
+    padding-top: 20px;
+    /* Placeholder for the bar chart */
+    height: 180px; 
+    background-color: transparent;
     display: flex;
     justify-content: space-around;
-    gap: 15px;
-    padding-top: 10px;
+    align-items: flex-end;
 }
 
-.metric-box {
-    text-align: center;
-    padding: 15px;
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
-    flex: 1;
+/* --- Recycled Materials (Donut Chart Mockup) --- */
+.materials-content {
+    display: flex;
+    gap: 20px;
+    align-items: center;
 }
 
-.box-label {
-    font-size: 0.9rem;
-    color: #777;
-    margin-bottom: 5px;
+.donut-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    /* Mockup colors for plastic/paper */
+    background: conic-gradient(
+        #c1e7c1 0% 70%, 
+        #f8961e 70% 100%
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-darker);
+    border: 5px solid var(--color-card-bg); /* Inner ring effect */
 }
 
-.box-value {
-    font-size: 1.8rem;
+/* --- Transactions Card Mockup --- */
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.transaction-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.transaction-details img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.transaction-amount {
     font-weight: 600;
-    color: #0d4734;
+    color: #D32F2F; /* Red for debit */
 }
 
-@media (max-width: 992px) {
-    .detail-sections {
+.transaction-amount.positive {
+    color: var(--color-accent-green); /* Green for credit */
+}
+
+/* --- Responsiveness (Crucial for Dashboard!) --- */
+
+/* Tablet and Smaller Desktop (Max 1200px) */
+@media (max-width: 1200px) {
+    .content-grid {
+        /* Switch to 2 columns */
+        grid-template-columns: 1fr 1fr; 
+        grid-template-rows: auto;
+    }
+
+    .guide-card { grid-column: 1 / 3; } /* Guide takes full width */
+    .packages-card { grid-column: 1 / 2; }
+    .materials-card { grid-column: 2 / 3; grid-row: 2 / 4; } /* Materials stays vertical */
+    .visits-card { grid-column: 1 / 2; }
+    .transactions-card { grid-column: 2 / 3; grid-row: 4 / 5; } /* Transactions moves below materials */
+}
+
+/* Mobile (Max 768px) */
+@media (max-width: 768px) {
+    body {
         flex-direction: column;
     }
 
     .sidebar {
-        width: 200px;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 15px 0;
+        z-index: 10;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.3);
     }
-.thinktext{
-    background-color: #0d4734;
-    height: 40px;
-    width: 30%;
-    border-radius: 5px;
-    border: none;
-    margin-top: 3vh;
-}
+    
+    .sidebar nav {
+        flex-direction: row;
+        flex-grow: unset;
+    }
+
+    .sidebar nav ul {
+        display: flex;
+        flex-direction: row;
+        width: auto;
+        gap: 10px;
+    }
+    .sidebar nav li {
+        margin: 0;
+    }
+    .sidebar nav li a {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
     .main-content {
         padding: 20px;
     }
-}
 
-@media (max-width: 768px) {
-    body {
-        flex-direction: column;
-    }
-.thinktext{
-    background-color: #0d4734;
-    height: 40px;
-    width: 30%;
-    border-radius: 5px;
-    border: none;
-    margin-top: 3vh;
-}
-    .sidebar {
-        width: 100%;
-        height: auto;
-        padding: 15px 20px;
-    }
-
-    .sidebar .logo {
-        text-align: center;
-        margin-bottom: 0;
-        border-bottom: none;
-        padding-bottom: 0;
-    }
-
-    .sidebar nav ul {
-        display: flex;
-        justify-content: space-around;
-        margin-top: 15px;
-    }
-    
-    .sidebar nav li {
-        flex: 1;
-        text-align: center;
-    }
-
+    /* Top Stats Bar */
     .dashboard-header {
         flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .kpi-cards-grid {
-        flex-direction: column;
-    }
-}
-
-.sidebar {
-    width: 280px; 
-}
-
-.main-content {
-    flex-grow: 1;
-    padding: 40px; 
-}
-
-.kpi-cards-grid {
-    gap: 30px; 
-}
-
-.kpi-card {
-    padding: 30px; 
-    border-left: 5px solid #4CAF50; 
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08); 
-    min-width: 250px;
-}
-
-.metric-value {
-    font-size: 3rem; 
-}
-
-.charts-area {
-    margin-bottom: 30px;
-}
-
-.chart-panel {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.chart-placeholder {
-    height: 350px; 
-    background-color: #f7f7f7; 
-    border-radius: 4px;
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    color: #999;
-    font-style: italic;
-    font-size: 1.2rem;
-}
-
-
-.detail-panel {
-    padding: 30px; 
-}
-
-
-@media (max-width: 992px) {
-    .sidebar {
-        width: 250px; 
-    }
-}
-
-
-@media (max-width: 992px) {
-    .sidebar {
-        width: 200px;
-    }
-
-    .main-content {
-        padding: 25px;
-    }
-
-    .kpi-cards-grid {
         gap: 15px;
     }
     
-    .kpi-card {
-        flex: 1 1 calc(50% - 15px); 
-        min-width: unset;
-    }
-
-    .detail-sections {
-        flex-direction: column;
-        gap: 25px;
-    }
-    
-    .chart-placeholder {
-        height: 300px; 
-    }
-}
-
-@media (max-width: 768px) {
-    body {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        height: auto;
-        padding: 15px 20px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .sidebar .logo {
-        text-align: center;
-        margin-bottom: 0;
-        border-bottom: none;
-        padding-bottom: 0;
-    }
-
-    .sidebar nav ul {
-        display: flex;
+    .top-stats-group {
         flex-wrap: wrap;
-        justify-content: space-around;
-        margin-top: 15px;
-    }
-    
-    .sidebar nav li {
-        flex: 1;
-        text-align: center;
-        margin: 5px 0;
-    }
-    
-    .sidebar nav li a {
-        padding: 8px 10px;
-        font-size: 0.9rem;
+        justify-content: center;
+        gap: 20px 30px;
+        font-size: 1rem;
     }
 
-
-    .main-content {
-        padding: 15px;
-    }
-
-    .dashboard-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .dashboard-header h1 {
-        font-size: 1.5rem;
-        margin-bottom: 10px;
-    }
-
-    .kpi-cards-grid {
-        flex-direction: column;
+    /* Grid Collapse */
+    .content-grid {
+        grid-template-columns: 1fr; /* Single column */
         gap: 20px;
     }
-    
-    .kpi-card {
-        flex: 1 1 100%; 
-    }
-    
-    .metric-value {
-        font-size: 2rem;
-    }
 
-    .financial-metrics {
+    /* All items now stack vertically */
+    .content-grid > * {
+        grid-column: 1 / 2 !important;
+        grid-row: auto !important;
+    }
+    
+    .guide-card {
         flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
-}
-.data-table-placeholder table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.data-table-placeholder th, .data-table-placeholder td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-.data-table-placeholder th {
-    background-color: #f0f8f0;
-    color: #0d4734;
-    font-weight: 600;
-}
-
-.data-table-placeholder tr:last-child td {
-    border-bottom: none;
-}
-
-#inventory-table td.alert {
-    color: #D32F2F !important; 
-    font-weight: bold;
-}
-
-@media (max-width: 768px) {
-    .table-responsive {
-        width: 100%;
-        overflow-x: auto; 
-        -webkit-overflow-scrolling: touch; 
-    }
-    .data-table-placeholder table {
-        min-width: 600px; 
-    }
-}
-@media (max-width: 768px) {
-    .table-responsive {
-        width: 100%;
-        overflow-x: auto; 
-        -webkit-overflow-scrolling: touch; 
+    .guide-image {
+        margin-top: 15px;
     }
 
-    .data-table-placeholder table {
-        min-width: 600px; 
+    .materials-content {
+        flex-direction: column;
     }
 }

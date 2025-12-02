@@ -1,12 +1,12 @@
-/* --- Global Styles --- */
+
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    color: #f0f0f0; /* Light text on dark background */
-    background-color: #0d4734; /* Dark green base */
+    color: #f0f0f0; 
+    background-color: #0d4734; 
     scroll-behavior: smooth;
-    overflow-x: hidden; /* Prevent horizontal overflow */
+    overflow-x: hidden; 
 }
 
 .container {
@@ -18,7 +18,7 @@ body {
 h1, h2, h3 {
     margin-top: 0;
     font-weight: 700;
-    color: #c1e7c1; /* Lighter green for headlines */
+    color: #c1e7c1; 
 }
 
 p {
@@ -42,7 +42,6 @@ ul {
     margin: 0;
 }
 
-/* --- Buttons --- */
 .eco-button {
     display: inline-block;
     padding: 15px 30px;
@@ -56,7 +55,7 @@ ul {
 }
 
 .primary-btn {
-    background-color: #4CAF50; /* Bright Green */
+    background-color: #4CAF50;
     color: white;
 }
 
@@ -66,8 +65,8 @@ ul {
 }
 
 .secondary-btn {
-    background-color: #c1e7c1; /* Lighter Green */
-    color: #0d4734; /* Dark text for contrast */
+    background-color: #c1e7c1; 
+    color: #0d4734; 
 }
 
 .secondary-btn:hover {
@@ -76,9 +75,8 @@ ul {
 }
 
 
-/* --- Navbar --- */
 .navbar-eco {
-    background-color: #0d4734; /* Dark green */
+    background-color: #0d4734; 
     padding: 20px 0;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     position: sticky;
@@ -151,12 +149,11 @@ ul {
     color: #4CAF50;
 }
 
-/* --- Hero Section --- */
 .hero-eco {
-    background-color: #1e6c4e; /* Medium green */
+    background-color: #1e6c4e; 
     padding: 80px 0;
     position: relative;
-    overflow: hidden; /* For background shapes */
+    overflow: hidden; 
 }
 
 .hero-inner {
@@ -165,7 +162,7 @@ ul {
     justify-content: space-between;
     gap: 40px;
     position: relative;
-    z-index: 2; /* Ensure content is above any background shapes */
+    z-index: 2;
 }
 
 .hero-text-content {
@@ -230,7 +227,6 @@ ul {
     color: #4CAF50;
 }
 
-/* --- Program Section --- */
 .program-section {
     background-color: #0d4734;
     padding: 100px 0;
@@ -289,9 +285,8 @@ ul {
     color: white;
 }
 
-/* --- Impact Section --- */
 .impact-section {
-    background-color: #1e6c4e; /* Medium green */
+    background-color: #1e6c4e; 
     padding: 100px 0;
 }
 
@@ -349,7 +344,7 @@ ul {
 }
 
 
-/* --- Newsletter Section --- */
+
 .newsletter-section {
     background-color: #0d4734;
     padding: 100px 0;
@@ -433,9 +428,8 @@ ul {
     color: #4CAF50;
 }
 
-/* --- Footer --- */
 .eco-footer {
-    background-color: #052c1e; /* Even darker green */
+    background-color: #052c1e; 
     padding-top: 60px;
     padding-bottom: 20px;
 }
@@ -444,7 +438,7 @@ ul {
     display: flex;
     justify-content: space-between;
     gap: 40px;
-    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    flex-wrap: wrap; 
     margin-bottom: 40px;
 }
 
@@ -495,7 +489,6 @@ ul {
 }
 
 
-/* --- Responsive Adjustments --- */
 @media (max-width: 992px) {
     .navbar-content {
         flex-wrap: wrap;
@@ -505,7 +498,7 @@ ul {
     .main-nav ul {
         width: 100%;
         justify-content: center;
-        order: 3; /* Move nav below logo/search */
+        order: 3;
         gap: 20px;
     }
     .hero-inner {
@@ -568,8 +561,7 @@ ul {
         width: 100%;
     }
 }
-/* --- Responsive Adjustments --- */
-/* Tablet View (Max 992px) */
+
 @media (max-width: 992px) {
     .navbar-content {
         flex-wrap: wrap;
@@ -578,7 +570,7 @@ ul {
     }
     
     .search-tools {
-        display: none; /* Hide Search Tools on tablet for cleaner navigation */
+        display: none;
     }
 
     .main-nav ul {
@@ -591,15 +583,15 @@ ul {
     .hero-inner {
         flex-direction: column;
         text-align: center;
-        padding: 0; /* Remove horizontal padding here, handled by container */
+        padding: 0; 
     }
 
     .hero-text-content {
-        max-width: 85%; /* Slightly narrower text for focus */
+        max-width: 85%;
     }
     
     .hero-text-content h1 {
-        font-size: 3.5rem; /* Reduced for tablet */
+        font-size: 3.5rem; 
     }
     
     .hero-image-container {
@@ -622,13 +614,12 @@ ul {
     }
 
     .footer-content {
-        grid-template-columns: repeat(2, 1fr); /* Two columns on tablet */
+        grid-template-columns: repeat(2, 1fr); 
     }
 }
 
-/* Mobile View (Max 768px) */
+
 @media (max-width: 768px) {
-    /* Navbar Collapse */
     .navbar-content {
         flex-direction: column;
         gap: 15px;
@@ -640,13 +631,12 @@ ul {
         justify-content: space-between;
     }
 
-    /* Hero */
     .hero-eco {
         padding: 60px 0;
     }
     
     .hero-text-content h1 {
-        font-size: 2.5rem; /* Reduced for mobile */
+        font-size: 2.5rem; 
     }
     
     .hero-image-container {
@@ -654,13 +644,11 @@ ul {
         padding: 0 5px;
     }
 
-    /* Program Grid */
     .program-section h2 {
         font-size: 2.2rem;
     }
     
     .program-grid {
-        /* Default grid behavior handles stacking, but we ensure columns are full width */
         grid-template-columns: 1fr;
     }
     
@@ -672,12 +660,12 @@ ul {
         font-size: 1.3rem;
     }
 
-    /* Impact Section */
+ 
     .impact-section {
         padding: 60px 0;
     }
 
-    /* Newsletter Section */
+
     .newsletter-inner {
         padding: 40px 20px;
         border-radius: 10px;
@@ -697,7 +685,6 @@ ul {
         box-sizing: border-box;
     }
 
-    /* Footer Collapse */
     .footer-content {
         flex-direction: column;
         text-align: center;
