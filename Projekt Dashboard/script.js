@@ -102,19 +102,18 @@ const metricsTemplate = `
     </div>
 `;
 
-// C. Recycling Tracker Template (Action Form)
+// C. Recycling Tracker Template (MODIFIED FOR DESKTOP WIDTH)
 const trackerTemplate = `
-    <header class="dashboard-header" style="background:none; box-shadow:none;">
-        <h1>Log Your Recycling Action</h1>
-    </header>
-    <div class="kpi-card" style="max-width: 600px; margin: 0 auto; padding: 40px;">
-        <h2>What are you recycling today?</h2>
-        <p style="color: #b0d9b0; margin-bottom: 30px;">Select your material and estimate the weight/quantity.</p>
+    <h1 style="font-size: 2.5rem; color: var(--color-light-text);">What are you recycling today?</h1>
+    
+    <div class="kpi-card tracker-form-card"> 
+        <p style="color: #b0d9b0; margin-bottom: 30px;">Select your material and estimate the quantity to track your environmental impact.</p>
         
         <form id="recycle-log-form">
             <div class="input-group">
                 <label for="material" style="color:var(--color-light-text);">Material Type</label>
-                <select id="material" name="material" style="width: 100%; padding: 12px; border-radius: 6px; background-color: var(--color-dark-base); color: var(--color-light-text); border: 1px solid var(--color-card-bg);">
+                <select id="material" name="material" required 
+                    style="width: 100%; padding: 15px; border-radius: 8px; background-color: var(--color-dark-base); color: var(--color-light-text); border: 1px solid var(--color-dark-base); font-size: 1rem; box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);">
                     <option value="plastic">Plastic</option>
                     <option value="paper">Paper/Cardboard</option>
                     <option value="glass">Glass</option>
@@ -124,16 +123,19 @@ const trackerTemplate = `
 
             <div class="input-group">
                 <label for="weight" style="color:var(--color-light-text);">Estimated Weight (kg)</label>
-                <input type="number" id="weight" name="weight" min="0.1" step="0.1" required style="width: 100%; padding: 12px; border-radius: 6px; background-color: var(--color-dark-base); color: var(--color-light-text); border: 1px solid var(--color-card-bg);">
+                <input type="number"  placeholder="1-25kg" id="weight" name="weight" min="0.1" step="0.1" required 
+                    style="padding: 15px; border-radius: 8px; background-color: var(--color-dark-base); color: var(--color-light-text); border: 1px solid var(--color-dark-base); font-size: 1rem; box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);">
             </div>
-            
-            <button type="submit" class="eco-button primary-btn" style="width: 100%; margin-top: 20px;">
-                Log Recycle! <i class="fas fa-check-circle"></i>
+            <div class="input-group2" style="display: flex; justify-content: center;">
+            <button type="submit" class="eco-button primary-btn" style="width: 40%; margin-top: 30px; padding: 15px; background-color: #388E3C; border:none;  border-radius: 5px;">
+                Recycle <i class="fas fa-recycle recycle-icon"></i>
             </button>
+            </div>
         </form>
         <p id="log-message" style="margin-top: 20px; color: var(--color-accent-green);"></p>
     </div>
 `;
+
 
 // D. Settings Template (Quick inclusion for nav menu)
 const settingsTemplate = `
@@ -202,14 +204,13 @@ const handleTrackerForm = () => {
             // In a real app, this is where you send data to Firebase
             // db.collection("recycling_logs").add({ userId: ..., material, weight, timestamp: new Date() });
 
-            message.textContent = `SUCCESS! Logged ${weight} kg of ${material}. Data ready for Firebase.`;
+            message.textContent = `Thanks for recycling ${weight} kg of ${material}, Let's make the earth liveable again 🌍`;
             form.reset();
         });
     }
 };
 
 
-// --- 4. CORE APPLICATION NAVIGATION LOGIC ---
 
 const loadPage = (pageName) => {
     let template = '';
