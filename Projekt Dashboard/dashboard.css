@@ -340,7 +340,7 @@ text-decoration: none;
 color: #c1e7c1;
 }
 .input-group input{
-    width: 96%;
+    width: 93%;
     outline: none;
     }
 @media (max-width: 1200px) {
@@ -440,5 +440,8 @@ color: #c1e7c1;
     }
      .input-group input{
     width: 90%;
+    }
+    .new{
+    flex-direction: column;
     }
 }

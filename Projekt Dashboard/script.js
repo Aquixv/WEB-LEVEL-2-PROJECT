@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
- 
+  import { getDatabase, ref, set, onValue, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyCV2oi-v6yUr_riCe_iDZrCyAz-rm8EbSM",
     authDomain: "aquii-fb-2.firebaseapp.com",
@@ -13,10 +14,35 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebas
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const database = getDatabase(app);
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log(user);
+                const sanitizeEmailKey = (email) => {
+    if (!email) return null;
+    return email.replace(/\./g, ',').replace(/@/g, '-');
+};
+        const userEmail = user.email;
+    const sanitizedEmail = sanitizeEmailKey(userEmail);
+    const db = getDatabase();
+    const userRef = ref(db, 'allUsers/' + sanitizedEmail);
+    get(userRef).then((snapshot) => {
+        if (!snapshot.exists()) {
+            console.log("New login detected. Creating default profile...");
+            set(userRef, {
+                email: userEmail,
+                displayName: user.displayName || userEmail.split('@')[0],
+                dateCreated: new Date().toLocaleDateString(),
+                totalRecycled: 0,
+                currentStreak: 0, 
+            });
+            } else {
+            console.log("Existing profile found.");
+        }
+    }).catch((error) => {
+        console.error("Error accessing database for profile check:", error);
+    });
         userprofile.innerHTML += `
         <img src ="${user.photoURL}" alt= "DP" width='100'
         style = "border-radius:100%"/>
@@ -40,6 +66,16 @@ signOut(auth).then(() => {
 });
 }
 window.signout = signout;
+
+
+
+
+
+
+
+
+
+
 
 const dashboardData = {
     currentStreak: 14,
@@ -103,8 +139,8 @@ const metricsTemplate = `
 `;
 
 // C. Recycling Tracker Template (MODIFIED FOR DESKTOP WIDTH)
-const trackerTemplate = `
-    <h1 style="font-size: 2.5rem; color: var(--color-light-text);">What are you recycling today?</h1>
+const trackerTemplate = ` <div class="new" style= "display:flex; justify-content:center;"> 
+    <h1 style="font-size: 2.5rem; color: var(--color-light-text); text-align: center;">What are you recycling today?</h1>
     
     <div class="kpi-card tracker-form-card"> 
         <p style="color: #b0d9b0; margin-bottom: 30px;">Select your material and estimate the quantity to track your environmental impact.</p>
@@ -123,7 +159,7 @@ const trackerTemplate = `
 
             <div class="input-group">
                 <label for="weight" style="color:var(--color-light-text);">Estimated Weight (kg)</label>
-                <input type="number"  placeholder="1-25kg" id="weight" name="weight" min="0.1" step="0.1" required 
+                <input type="number"  placeholder="1-25kg" id="weight" name="weight" min="0.1" max="25" step="0.1" required 
                     style="padding: 15px; border-radius: 8px; background-color: var(--color-dark-base); color: var(--color-light-text); border: 1px solid var(--color-dark-base); font-size: 1rem; box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);">
             </div>
             <div class="input-group2" style="display: flex; justify-content: center;">
@@ -133,6 +169,7 @@ const trackerTemplate = `
             </div>
         </form>
         <p id="log-message" style="margin-top: 20px; color: var(--color-accent-green);"></p>
+    </div>
     </div>
 `;
 
@@ -206,6 +243,16 @@ const handleTrackerForm = () => {
 
             message.textContent = `Thanks for recycling ${weight} kg of ${material}, Let's make the earth liveable again 🌍`;
             form.reset();
+        const obj = {
+        itemrecycled: material,
+    quantity: weight,
+        time:new Date().toLocaleTimeString(),
+        date: new Date().toLocaleDateString(),
+    }
+      const dbRef =  ref(database, 'allUsers')
+  set(dbRef, obj)
+
+    console.log(obj)
         });
     }
 };
