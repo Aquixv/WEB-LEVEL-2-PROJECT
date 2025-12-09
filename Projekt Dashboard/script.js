@@ -1,6 +1,42 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-  import { getDatabase, ref, set, onValue, get } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+  import { getDatabase, ref, set, onValue, get, push, runTransaction } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const updateStreak = async (userKey) => {
+    const db = getDatabase();
+    const streakRef = ref(db, 'allUsers/' + userKey);
+
+    const today = new Date().toISOString().slice(0, 10);
+    await runTransaction(streakRef, (currentData) => {
+        if (!currentData) {
+            return { currentStreak: 1, lastRecycleDate: today };
+        }
+        
+        const lastDate = currentData.lastRecycleDate;
+        const currentStreak = currentData.currentStreak || 0;
+
+        const getDateOffset = (offset) => {
+             return new Date(new Date().setDate(new Date().getDate() + offset)).toISOString().slice(0, 10);
+        };
+        
+        const yesterday = getDateOffset(-1);
+        
+        if (lastDate === today) {
+            return currentData; 
+        }
+
+        if (lastDate === yesterday) {
+            currentData.currentStreak = currentStreak + 1;
+        } 
+        
+        else {
+            currentData.currentStreak = 1;
+        }
+
+        currentData.lastRecycleDate = today;
+        return currentData; 
+    });
+};
 
   const firebaseConfig = {
     apiKey: "AIzaSyCV2oi-v6yUr_riCe_iDZrCyAz-rm8EbSM",
@@ -19,7 +55,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebas
   onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log(user);
-                const sanitizeEmailKey = (email) => {
+        window.CURRENT_USER_EMAIL = user.email;
+        window.CURRENT_USER_NAME = user.displayName;
+        window.IS_USER_AUTHENTICATED = true; 
+        loadPage('welcome');
+        const sanitizeEmailKey = (email) => {
     if (!email) return null;
     return email.replace(/\./g, ',').replace(/@/g, '-');
 };
@@ -47,11 +87,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebas
         <img src ="${user.photoURL}" alt= "DP" width='100'
         style = "border-radius:100%"/>
         <h3>${user.displayName}</h3>`
-        redmi.innerHTML += `${user.displayName}`
     } else{
         setTimeout(() => {
             window.location.href = "../index.html";
         }, 1000)
+        window.CURRENT_USER_EMAIL = null; 
+        window.IS_USER_AUTHENTICATED = false;
+        window.CURRENT_USER_NAME = null;
         }
     }
   );
@@ -74,40 +116,34 @@ window.signout = signout;
 
 
 
-
-
-
 const dashboardData = {
-    currentStreak: 14,
+    // currentStreak: 18,
     totalRecycled: "1,540 kg",
     metrics: { 
         plasticRecycled: 70, 
         paperRecycled: 30, 
-        monthlyData: [120, 150, 130, 180, 160] // Mock data for charts
+        monthlyData: [120, 150, 130, 180, 160]
     }
 };
 
 const pageContentDiv = document.getElementById('page-content');
 const navLinks = document.querySelectorAll('.sidebar a');
+// const username = window.CURRENT_USER_NAME;
 
-// --- 2. NEW PAGE TEMPLATES ---
+// const welcomeTemplate = `
+//     <header class="dashboard-header" style="background:none; box-shadow:none;">
+//         <h1 style="font-size: 2.5rem;">Welcome back, ${username}!</h1>
+//     </header>
+//     <div class="kpi-card" style="padding: 40px;">
+//         <p style="font-size: 1.5rem; margin-bottom: 15px; color: var(--color-light-text);">
+//             Your current recycling streak is <span style="color: var(--color-accent-green); font-weight: 700;">${dashboardData.currentStreak} days</span>!
+//         </p>
+//         <p style="font-size: 1.1rem; color: #b0d9b0;">
+//             Keep up the incredible work. Head over to the Metrics page to see your progress or the Tracker to log your next recycle run.
+//         </p>
+//     </div>
+// `;
 
-// A. Welcome Template (Simple Greeting)
-const welcomeTemplate = `
-    <header class="dashboard-header" style="background:none; box-shadow:none;">
-        <h1 style="font-size: 2.5rem;">Welcome back, <span id="redmi"></span>!</h1>
-    </header>
-    <div class="kpi-card" style="padding: 40px;">
-        <p style="font-size: 1.5rem; margin-bottom: 15px; color: var(--color-light-text);">
-            Your current recycling streak is <span style="color: var(--color-accent-green); font-weight: 700;">${dashboardData.currentStreak} days</span>!
-        </p>
-        <p style="font-size: 1.1rem; color: #b0d9b0;">
-            Keep up the incredible work. Head over to the Metrics page to see your progress or the Tracker to log your next recycle run.
-        </p>
-    </div>
-`;
-
-// B. Metrics Template (Charts Ready for Chart.js)
 const metricsTemplate = `
     <header class="dashboard-header" style="background:none; box-shadow:none;">
         <h1>Your Recycling Metrics</h1>
@@ -138,7 +174,6 @@ const metricsTemplate = `
     </div>
 `;
 
-// C. Recycling Tracker Template (MODIFIED FOR DESKTOP WIDTH)
 const trackerTemplate = ` <div class="new" style= "display:flex; justify-content:center;"> 
     <h1 style="font-size: 2.5rem; color: var(--color-light-text); text-align: center;">What are you recycling today?</h1>
     
@@ -174,7 +209,6 @@ const trackerTemplate = ` <div class="new" style= "display:flex; justify-content
 `;
 
 
-// D. Settings Template (Quick inclusion for nav menu)
 const settingsTemplate = `
     <header class="dashboard-header" style="background:none; box-shadow:none;">
         <h1>Account Settings</h1>
@@ -188,10 +222,8 @@ const settingsTemplate = `
 `;
 
 
-// --- 3. CHART & FUNCTION LOGIC ---
 
 const renderCharts = (data) => {
-    // 1. Monthly Trend Chart (Line Chart)
     const ctxMonthly = document.getElementById('monthlyTrendChart');
     if (ctxMonthly) {
         new Chart(ctxMonthly, {
@@ -211,7 +243,6 @@ const renderCharts = (data) => {
         });
     }
 
-    // 2. Material Breakdown Chart (Doughnut Chart)
     const ctxBreakdown = document.getElementById('materialBreakdownChart');
     if (ctxBreakdown) {
         new Chart(ctxBreakdown, {
@@ -231,43 +262,101 @@ const renderCharts = (data) => {
 const handleTrackerForm = () => {
     const form = document.getElementById('recycle-log-form');
     const message = document.getElementById('log-message');
+    const db = getDatabase();
+
+    const sanitizeEmailKey = (email) => {
+        if (!email) return null;
+        return email.replace(/\./g, ',').replace(/@/g, '-');
+    };
+
+    const userEmail = window.CURRENT_USER_EMAIL;
+    const userKey = sanitizeEmailKey(userEmail); 
+
+    if (!userKey) {
+        message.textContent = "Error: User data is missing or invalid. Please refresh.";
+        message.style.color = '#D32F2F';
+        return;
+    }
 
     if (form) {
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => { 
             e.preventDefault();
+            
             const material = document.getElementById('material').value;
             const weight = document.getElementById('weight').value;
             
-            // In a real app, this is where you send data to Firebase
-            // db.collection("recycling_logs").add({ userId: ..., material, weight, timestamp: new Date() });
+            const logData = {
+                itemrecycled: material,
+                quantity: weight,
+                date: new Date().toLocaleDateString(),
+                time: new Date().toLocaleTimeString(),
+                timestamp: Date.now()
+            };
 
-            message.textContent = `Thanks for recycling ${weight} kg of ${material}, Let's make the earth liveable again 🌍`;
-            form.reset();
-        const obj = {
-        itemrecycled: material,
-    quantity: weight,
-        time:new Date().toLocaleTimeString(),
-        date: new Date().toLocaleDateString(),
-    }
-      const dbRef =  ref(database, 'allUsers')
-  set(dbRef, obj)
+            const logsRef = ref(db, 'allUsers/' + userKey + '/recycling_logs');
+            
+            try {
+                await push(logsRef, logData); 
 
-    console.log(obj)
+                await updateStreak(userKey);
+
+                message.style.color = 'var(--color-accent-green)';
+                message.textContent = `Thanks for recycling ${weight} kg of ${material}, Let's make the earth liveable again 🌍`;
+
+                console.log("Log successful. User Key:", userKey); 
+                form.reset();
+                if (typeof loadPage === 'function') { 
+                }
+
+            } catch (error) {
+                message.style.color = '#D32F2F';
+                message.textContent = `ERROR logging data: ${error.message}`;
+                console.error("Firebase Push Error:", error);
+            }
         });
     }
 };
 
 
 
-const loadPage = (pageName) => {
+
+const loadPage = async (pageName) => {
     let template = '';
     let loadFunction = null;
 
     if (pageName === 'welcome') {
-        template = welcomeTemplate;
+        const db = getDatabase();
+        const userEmail = window.CURRENT_USER_EMAIL;
+          const sanitizeEmailKey = (email) => {
+        if (!email) return null;
+        return email.replace(/\./g, ',').replace(/@/g, '-');
+    };
+    const userKey = sanitizeEmailKey(userEmail);
+        const streakRef = ref(db, 'allUsers/' + userKey + '/currentStreak');
+        try {
+            const snapshot = await get(streakRef);
+            dashboardData.currentStreak = snapshot.exists() ? snapshot.val() : 0;
+        } catch (error) {
+            console.error("Failed to fetch streak:", error);
+            dashboardData.currentStreak = 0;
+        }
+        const userName = window.CURRENT_USER_NAME || 'Recycler'; 
+        const welcometemplate = `
+            <header class="dashboard-header" style="background:none; box-shadow:none;">
+                <h1 style="font-size: 2.5rem;">Welcome back, ${userName}!</h1>
+            </header>
+            <div class="kpi-card" style="padding: 40px;">
+         <p style="font-size: 1.5rem; margin-bottom: 15px; color: var(--color-light-text);">
+        Your current recycling streak is <span style="color: var(--color-accent-green); font-weight: 700;">${dashboardData.currentStreak} day(s)</span>!
+         </p>
+         <p style="font-size: 1.1rem; color: #b0d9b0;">
+             Keep up the incredible work. Head over to the Metrics page to see your progress or the Tracker to log your next recycle run.
+         </p>
+         </div>`;
+    template = welcometemplate;
     } else if (pageName === 'metrics') {
         template = metricsTemplate;
-        // The charts need to be rendered after the canvas elements load
+        
         loadFunction = () => { renderCharts(dashboardData.metrics); }; 
     } else if (pageName === 'tracker') {
         template = trackerTemplate;
@@ -275,7 +364,6 @@ const loadPage = (pageName) => {
     } else if (pageName === 'settings') {
         template = settingsTemplate;
     } 
-    // Removed old 'inventory', 'finance' logic
 
     pageContentDiv.className = pageName === 'welcome' ? '' : 'content-grid'; // Use grid for data pages
     pageContentDiv.innerHTML = template;
@@ -284,9 +372,6 @@ const loadPage = (pageName) => {
         setTimeout(loadFunction, 0); 
     }
 };
-
-// --- 5. INITIALIZATION ---
-// ... (Keep existing event listeners for navLinks) ...
 
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -298,6 +383,6 @@ navLinks.forEach(link => {
     });
 });
 
-// Load the initial welcome page when the script starts
-// Note: We need Chart.js included in the HTML for this to work!
 loadPage('welcome');
+// message.textContent = `Thanks for recycling ${weight} kg of ${material}, Let's make the earth liveable again 🌍`;
+//             form.reset();
