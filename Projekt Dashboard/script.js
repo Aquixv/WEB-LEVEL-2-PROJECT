@@ -75,7 +75,7 @@ const updateStreak = async (userKey) => {
                 displayName: user.displayName || userEmail.split('@')[0],
                 dateCreated: new Date().toLocaleDateString(),
                 totalRecycled: 0,
-                currentStreak: 0, 
+                currentStreak: 1, 
             });
             } else {
             console.log("Existing profile found.");
