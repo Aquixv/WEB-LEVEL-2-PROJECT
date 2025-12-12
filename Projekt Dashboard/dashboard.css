@@ -106,7 +106,7 @@ text-decoration: none;
 
 .top-stats-group {
     display: flex;
-    gap: 40px;
+    gap: 20px;
     font-size: 1.1rem;
     font-weight: 500;
 }

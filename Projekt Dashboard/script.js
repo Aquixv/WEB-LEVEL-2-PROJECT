@@ -1,43 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
   import { getDatabase, ref, set, onValue, get, push, runTransaction } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
-
-const updateStreak = async (userKey) => {
-    const db = getDatabase();
-    const streakRef = ref(db, 'allUsers/' + userKey);
-
-    const today = new Date().toISOString().slice(0, 10);
-    await runTransaction(streakRef, (currentData) => {
-        if (!currentData) {
-            return { currentStreak: 1, lastRecycleDate: today };
-        }
-        
-        const lastDate = currentData.lastRecycleDate;
-        const currentStreak = currentData.currentStreak || 0;
-
-        const getDateOffset = (offset) => {
-             return new Date(new Date().setDate(new Date().getDate() + offset)).toISOString().slice(0, 10);
-        };
-        
-        const yesterday = getDateOffset(-1);
-        
-        if (lastDate === today) {
-            return currentData; 
-        }
-
-        if (lastDate === yesterday) {
-            currentData.currentStreak = currentStreak + 1;
-        } 
-        
-        else {
-            currentData.currentStreak = 1;
-        }
-
-        currentData.lastRecycleDate = today;
-        return currentData; 
-    });
-};
-
+ 
   const firebaseConfig = {
     apiKey: "AIzaSyCV2oi-v6yUr_riCe_iDZrCyAz-rm8EbSM",
     authDomain: "aquii-fb-2.firebaseapp.com",
@@ -64,9 +28,9 @@ const updateStreak = async (userKey) => {
     return email.replace(/\./g, ',').replace(/@/g, '-');
 };
         const userEmail = user.email;
-    const sanitizedEmail = sanitizeEmailKey(userEmail);
+    const userKey = sanitizeEmailKey(userEmail);
     const db = getDatabase();
-    const userRef = ref(db, 'allUsers/' + sanitizedEmail);
+    const userRef = ref(db, 'allUsers/' + userKey);
     get(userRef).then((snapshot) => {
         if (!snapshot.exists()) {
             console.log("New login detected. Creating default profile...");
@@ -74,8 +38,8 @@ const updateStreak = async (userKey) => {
                 email: userEmail,
                 displayName: user.displayName || userEmail.split('@')[0],
                 dateCreated: new Date().toLocaleDateString(),
-                totalRecycled: 0,
-                currentStreak: 1, 
+                // totalRecycled: 0,
+                currentStreak: 0, 
             });
             } else {
             console.log("Existing profile found.");
@@ -97,6 +61,147 @@ const updateStreak = async (userKey) => {
         }
     }
   );
+  const sanitizeEmailKey = (email) => {
+        if (!email) return null;
+        return email.replace(/\./g, ',').replace(/@/g, '-');
+    };
+    const userKey = sanitizeEmailKey(window.CURRENT_USER_EMAIL);
+
+  const updateStreak = async (userKey) => {
+    const db = getDatabase();
+    const streakRef = ref(db, 'allUsers/' + userKey); 
+
+    const today = new Date().toISOString().slice(0, 10); 
+    
+    await runTransaction(streakRef, (currentData) => {
+        
+        if (!currentData || !currentData.lastRecycleDate) {
+            return { 
+                ...currentData,
+                currentStreak: 1, 
+                lastRecycleDate: today 
+            };
+        }
+
+        const lastDate = currentData.lastRecycleDate;
+        const currentStreak = currentData.currentStreak || 0;
+        
+        const getDateOffset = (offset) => {
+             return new Date(new Date().setDate(new Date().getDate() + offset)).toISOString().slice(0, 10);
+        };
+        const yesterday = getDateOffset(-1);
+
+        
+
+        if (lastDate === today) {
+            return currentData; 
+        }
+
+        
+        if (lastDate === yesterday) {
+            currentData.currentStreak = currentStreak + 1;
+        } 
+        
+        
+        else {
+            currentData.currentStreak = 1;
+        }
+
+        currentData.lastRecycleDate = today;
+        return currentData;
+    });
+};
+const fetchAndCalculateMetrics = async (userKey) => {
+    const db = getDatabase();
+    const logsRef = ref(db, 'allUsers/' + userKey + '/recycling_logs');
+
+    let totalWeight = 0;
+    let materialTotals = { plastic: 0, paper: 0, glass: 0, metal: 0 };
+    let monthlyDataMap = {}; 
+
+    try {
+        const snapshot = await get(logsRef);
+        
+        if (snapshot.exists()) {
+            const logs = snapshot.val();
+            
+            for (const logId in logs) {
+                const log = logs[logId];
+                const weight = parseFloat(log.quantity);
+                const material = log.itemrecycled;
+                
+                totalWeight += weight;
+                
+                if (materialTotals.hasOwnProperty(material)) {
+                    materialTotals[material] += weight;
+                }
+
+                const logDate = new Date(log.timestamp); 
+                const monthKey = `${logDate.getFullYear()}-${logDate.getMonth() + 1}`;
+                
+                monthlyDataMap[monthKey] = (monthlyDataMap[monthKey] || 0) + weight;
+            }
+        }
+
+        return {
+            totalRecycled: totalWeight.toFixed(1), 
+            materialTotals: materialTotals,
+            monthlyDataMap: monthlyDataMap
+        };
+
+    } catch (error) {
+        console.error("Error fetching and calculating metrics:", error);
+        return { totalRecycled: "0.0", materialTotals: {}, monthlyDataMap: {} }; 
+    }
+};
+const renderConsistencyHeatmap = (rawMonthlyData) => {
+    const heatmapDiv = document.getElementById('consistency-heatmap');
+    if (!heatmapDiv) return;
+
+    // Get the keys and sort them chronologically
+    const monthKeys = Object.keys(rawMonthlyData).sort();
+    
+    let summaryHTML = '<div style="display: flex; flex-wrap: wrap; justify-content: center;">';
+    
+    monthKeys.forEach(key => {
+        const [year, month] = key.split('-');
+        
+        // Use a date object to get the full month name (e.g., Dec)
+        // Note: month - 1 is used because JavaScript months are 0-indexed (0=Jan)
+        const monthName = new Date(year, month - 1, 1).toLocaleString('default', { month: 'short' });
+        const weight = rawMonthlyData[key];
+        
+        // --- Logic for Intensity (The "Heat" in Heatmap) ---
+        let intensity = '';
+        if (weight > 50) intensity = 'background-color: #388E3C; border: 1px solid #C8E6C9;'; // High (Dark Green)
+        else if (weight > 10) intensity = 'background-color: #4CAF50; border: 1px solid #A5D6A7;'; // Medium
+        else intensity = 'background-color: #66BB6A; border: 1px solid #E8F5E9;'; // Low (Light Green)
+
+        summaryHTML += `
+            <div style="
+                ${intensity}
+                color: #fff;
+                padding: 10px;
+                margin: 5px;
+                border-radius: 4px;
+                min-width: 100px;
+                text-align: center;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            ">
+                <strong>${monthName} ${year}</strong><br>
+                ${weight.toFixed(1)} kg Recycled
+            </div>
+        `;
+    });
+    
+    summaryHTML += '</div>';
+
+    if (monthKeys.length === 0) {
+        heatmapDiv.innerHTML = '<p style="color:#b0d9b0;">No recycling activity yet this year. Log your first item!</p>';
+    } else {
+        heatmapDiv.innerHTML = summaryHTML;
+    }
+};
   const signout = () => {
 signOut(auth).then(() => {
     console.log('user is signed out');
@@ -104,7 +209,6 @@ signOut(auth).then(() => {
         window.location.href = 'index.html'
     }, 1000)
 }).catch((error) => {
-    //an error happened.
 });
 }
 window.signout = signout;
@@ -117,62 +221,63 @@ window.signout = signout;
 
 
 const dashboardData = {
-    // currentStreak: 18,
-    totalRecycled: "1,540 kg",
+    totalRecycled: "60.0",
     metrics: { 
-        plasticRecycled: 70, 
-        paperRecycled: 30, 
-        monthlyData: [120, 150, 130, 180, 160]
+        plasticRecycled: 0, 
+        paperRecycled: 0, 
+        glassRecycled: 0, 
+        metalRecycled: 0, 
+        monthlyData: []
     }
 };
 
 const pageContentDiv = document.getElementById('page-content');
 const navLinks = document.querySelectorAll('.sidebar a');
-// const username = window.CURRENT_USER_NAME;
+const username = window.CURRENT_USER_NAME;
 
-// const welcomeTemplate = `
-//     <header class="dashboard-header" style="background:none; box-shadow:none;">
-//         <h1 style="font-size: 2.5rem;">Welcome back, ${username}!</h1>
-//     </header>
-//     <div class="kpi-card" style="padding: 40px;">
-//         <p style="font-size: 1.5rem; margin-bottom: 15px; color: var(--color-light-text);">
-//             Your current recycling streak is <span style="color: var(--color-accent-green); font-weight: 700;">${dashboardData.currentStreak} days</span>!
-//         </p>
-//         <p style="font-size: 1.1rem; color: #b0d9b0;">
-//             Keep up the incredible work. Head over to the Metrics page to see your progress or the Tracker to log your next recycle run.
-//         </p>
-//     </div>
-// `;
-
-const metricsTemplate = `
+const welcomeTemplate = `
     <header class="dashboard-header" style="background:none; box-shadow:none;">
-        <h1>Your Recycling Metrics</h1>
+        <h1 style="font-size: 2.5rem;">Welcome back, ${username}!</h1>
     </header>
-    <div class="content-grid" style="grid-template-columns: 2fr 1fr;">
-        
-        <div class="kpi-card" style="grid-column: 1/2; height: 350px;">
-            <h2>Monthly Recycling Trend (kg)</h2>
-            <canvas id="monthlyTrendChart"></canvas>
-        </div>
-
-        <div class="kpi-card" style="grid-column: 2/3;">
-            <h2>Material Breakdown</h2>
-            <div style="height: 250px;">
-                <canvas id="materialBreakdownChart"></canvas>
-            </div>
-            <p style="text-align:center; font-size:0.9rem; color:#b0d9b0; margin-top:15px;">
-                Total Recycled: ${dashboardData.totalRecycled}
-            </p>
-        </div>
-
-        <div class="kpi-card" style="grid-column: 1/3; text-align:center;">
-            <h2>Weekly Activity Heatmap (Placeholder)</h2>
-            <p style="color:#b0d9b0;">
-                (This is where the GitHub-style calendar would go, populated by a function.)
-            </p>
-        </div>
+    <div class="kpi-card" style="padding: 40px;">
+        <p style="font-size: 1.5rem; margin-bottom: 15px; color: var(--color-light-text);">
+            Your current recycling streak is <span style="color: var(--color-accent-green); font-weight: 700;">${dashboardData.currentStreak} days</span>!
+        </p>
+        <p style="font-size: 1.1rem; color: #b0d9b0;">
+            Keep up the incredible work. Head over to the Metrics page to see your progress or the Tracker to log your next recycle run.
+        </p>
     </div>
 `;
+
+// const metricsTemplate = `
+//     <header class="dashboard-header" style="background:none; box-shadow:none;">
+//         <h1>Your Recycling Metrics</h1>
+//     </header>
+//     <div class="content-grid" style="grid-template-columns: 2fr 1fr;">
+        
+//         <div class="kpi-card" style="grid-column: 1/2; height: 350px;">
+//             <h2>Monthly Recycling Trend (kg)</h2>
+//             <canvas id="monthlyTrendChart"></canvas>
+//         </div>
+
+//         <div class="kpi-card" style="grid-column: 2/3;">
+//             <h2>Material Breakdown</h2>
+//             <div style="height: 250px;">
+//                 <canvas id="materialBreakdownChart"></canvas>
+//             </div>
+//             <p style="text-align:center; font-size:0.9rem; color:#b0d9b0; margin-top:15px;">
+//                 Total Recycled: ${dashboardData.totalRecycled}
+//             </p>
+//         </div>
+
+//         <div class="kpi-card" style="grid-column: 1/3; text-align:center;">
+//             <h2>Weekly Activity Heatmap (Placeholder)</h2>
+//             <p style="color:#b0d9b0;">
+//                 (This is where the GitHub-style calendar would go, populated by a function.)
+//             </p>
+//         </div>
+//     </div>
+// `;
 
 const trackerTemplate = ` <div class="new" style= "display:flex; justify-content:center;"> 
     <h1 style="font-size: 2.5rem; color: var(--color-light-text); text-align: center;">What are you recycling today?</h1>
@@ -215,7 +320,7 @@ const settingsTemplate = `
     </header>
     <div class="kpi-card" style="padding: 40px;">
         <p style="color: #b0d9b0;">
-            Manage your profile, notification preferences, and privacy settings here.
+            Manage your profile, notification preferences, and privacy settings here.(But only sign out for now, Dev lives matter please 😭)
         </p>
     </div>
     <button class="signout-btn" onclick="signout()"><a href="#" data-page="logout"><i class="fas fa-sign-out-alt"></i></a></button>
@@ -224,54 +329,84 @@ const settingsTemplate = `
 
 
 const renderCharts = (data) => {
-    const ctxMonthly = document.getElementById('monthlyTrendChart');
-    if (ctxMonthly) {
-        new Chart(ctxMonthly, {
-            type: 'line',
-            data: {
-                labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
-                datasets: [{
-                    label: 'Recycling (kg)',
-                    data: data.monthlyData,
-                    borderColor: 'var(--color-accent-green)',
-                    tension: 0.4,
-                    fill: true,
-                    backgroundColor: 'rgba(76, 175, 80, 0.1)', // Light fill
-                }]
-            },
-            options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
-        });
-    }
-
     const ctxBreakdown = document.getElementById('materialBreakdownChart');
+    
     if (ctxBreakdown) {
+        const materialLabels = [];
+        const materialData = [];
+        const backgroundColors = [];
+        
+        // --- CRITICAL FIX: Defined Eco-Friendly Color Map ---
+        const colorMap = {
+            plasticRecycled: 'rgba(76, 175, 80, 1)',  // Vibrant Green (var(--color-accent-green))
+            paperRecycled: 'rgba(255, 152, 0, 1)',  // Warm Orange/Brown
+            glassRecycled: 'rgba(3, 169, 244, 1)',  // Light Blue (for clear glass/water)
+            metalRecycled: 'rgba(158, 158, 158, 1)', // Light Grey/Silver (for metal)
+        };
+        // You can also use colors from your CSS variables if they are accessible in JS:
+        // const colorMap = { ... plasticRecycled: getComputedStyle(document.documentElement).getPropertyValue('--color-accent-green').trim() };
+        // -----------------------------------------------------
+
+        // Loop through the material totals, only adding non-zero values
+        for (const material in data) {
+            const weight = parseFloat(data[material]);
+            
+            if (weight > 0) {
+                // Clean up the label name
+                let label = material.replace('Recycled', '').charAt(0).toUpperCase() + material.slice(1).replace('Recycled', '');
+
+                materialLabels.push(label);
+                materialData.push(weight);
+                
+                // Assign the thematic color
+                backgroundColors.push(colorMap[material] || '#cccccc'); // Use a fallback light grey if key is missing
+            }
+        }
+
+        // ... (No Data check remains the same) ...
+
+
         new Chart(ctxBreakdown, {
             type: 'doughnut',
             data: {
-                labels: ['Plastic', 'Paper/Cardboard'],
+                labels: materialLabels,
                 datasets: [{
-                    data: [data.plasticRecycled, data.paperRecycled],
-                    backgroundColor: ['var(--color-accent-green)', 'var(--color-warm-accent)'],
-                    hoverOffset: 8
+                    data: materialData, 
+                    backgroundColor: backgroundColors, 
+                    hoverOffset: 8,
+                    borderColor: 'rgba(0, 0, 0, 0)', 
+                    borderWidth: 0
                 }]
+            },
+            options: { 
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right', 
+                        labels: {
+                            color: 'var(--color-light-text)' // Use your theme color for text
+                        }
+                    }
+                }
             }
         });
     }
 };
+
 
 const handleTrackerForm = () => {
     const form = document.getElementById('recycle-log-form');
     const message = document.getElementById('log-message');
     const db = getDatabase();
 
-    const sanitizeEmailKey = (email) => {
-        if (!email) return null;
-        return email.replace(/\./g, ',').replace(/@/g, '-');
-    };
+    // const sanitizeEmailKey = (email) => {
+    //     if (!email) return null;
+    //     return email.replace(/\./g, ',').replace(/@/g, '-');
+    // };
 
     const userEmail = window.CURRENT_USER_EMAIL;
     const userKey = sanitizeEmailKey(userEmail); 
-
     if (!userKey) {
         message.textContent = "Error: User data is missing or invalid. Please refresh.";
         message.style.color = '#D32F2F';
@@ -293,11 +428,9 @@ const handleTrackerForm = () => {
                 timestamp: Date.now()
             };
 
-            const logsRef = ref(db, 'allUsers/' + userKey + '/recycling_logs');
-            
+            const logsRef = ref(db, 'allUsers/' + userKey + '/recycling_logs');            
             try {
                 await push(logsRef, logData); 
-
                 await updateStreak(userKey);
 
                 message.style.color = 'var(--color-accent-green)';
@@ -305,8 +438,7 @@ const handleTrackerForm = () => {
 
                 console.log("Log successful. User Key:", userKey); 
                 form.reset();
-                if (typeof loadPage === 'function') { 
-                }
+                if (typeof loadPage === 'function') { await loadPage('welcome'); }
 
             } catch (error) {
                 message.style.color = '#D32F2F';
@@ -327,10 +459,10 @@ const loadPage = async (pageName) => {
     if (pageName === 'welcome') {
         const db = getDatabase();
         const userEmail = window.CURRENT_USER_EMAIL;
-          const sanitizeEmailKey = (email) => {
-        if (!email) return null;
-        return email.replace(/\./g, ',').replace(/@/g, '-');
-    };
+    //       const sanitizeEmailKey = (email) => {
+    //     if (!email) return null;
+    //     return email.replace(/\./g, ',').replace(/@/g, '-');
+    // };
     const userKey = sanitizeEmailKey(userEmail);
         const streakRef = ref(db, 'allUsers/' + userKey + '/currentStreak');
         try {
@@ -355,9 +487,96 @@ const loadPage = async (pageName) => {
          </div>`;
     template = welcometemplate;
     } else if (pageName === 'metrics') {
-        template = metricsTemplate;
+        const userKey = sanitizeEmailKey(window.CURRENT_USER_EMAIL);
+        
+        const metrics = await fetchAndCalculateMetrics(userKey);
+        dashboardData.totalRecycled = metrics.totalRecycled;
+       dashboardData.metrics.plasticRecycled = metrics.materialTotals.plastic || 0;
+        dashboardData.metrics.paperRecycled = metrics.materialTotals.paper || 0;
+        dashboardData.metrics.glassRecycled = metrics.materialTotals.glass || 0; 
+        dashboardData.metrics.metalRecycled = metrics.materialTotals.metal || 0; 
+        
+        dashboardData.rawMonthlyData = metrics.monthlyDataMap;
+
+const metricsTemplate = `
+    <header class="dashboard-header" style="background:none; box-shadow:none;">
+        <h1>Your Recycling Metrics</h1>
+    </header>
+    
+    <div class="content-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
         
-        loadFunction = () => { renderCharts(dashboardData.metrics); }; 
+        <div class="kpi-card" style="grid-column: 1/2; display: flex; flex-direction: column; padding: 20px;">
+            
+            <h2>Material Breakdown (Total Weight)</h2>
+            
+            <div style="flex-grow: 1; min-height: 250px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;"> 
+                <canvas id="materialBreakdownChart" style="max-height: 100%; max-width: 100%;"></canvas>
+            </div>
+            
+        </div>
+        
+        <div class="kpi-card" style="grid-column: 2/3; display: flex; flex-direction: column; padding: 20px;">
+            
+            <h2>Recycled Weight</h2>
+
+           
+
+                <li style="display: flex; justify-content: space-between; padding: 5px 0;">
+                    <span>Plastic:</span> 
+                    <span style="font-weight: bold; color: var(--color-accent-green);">${parseFloat(dashboardData.metrics.plasticRecycled || 0).toFixed(1)} kg</span>
+                </li>
+                
+                <li style="display: flex; justify-content: space-between; padding: 5px 0;">
+                    <span>Paper/Cardboard:</span> 
+                    <span style="font-weight: bold; color: var(--color-accent-green);">${parseFloat(dashboardData.metrics.paperRecycled || 0).toFixed(1)} kg</span>
+                </li>
+                
+                <li style="display: flex; justify-content: space-between; padding: 5px 0;">
+                    <span>Glass:</span> 
+                    <span style="font-weight: bold; color: var(--color-accent-green);">${parseFloat(dashboardData.metrics.glassRecycled || 0).toFixed(1)} kg</span>
+                </li>
+                
+                <li style="display: flex; justify-content: space-between; padding: 5px 0;">
+                    <span>Metal:</span> 
+                    <span style="font-weight: bold; color: var(--color-accent-green);">${parseFloat(dashboardData.metrics.metalRecycled || 0).toFixed(1)} kg</span>
+                </li>
+                          <ul style="list-style: none; padding: 0; margin-top: 15px; border-top: 2px solid rgba(255,255,255,0.1); padding-top: 10px;">       
+                <li style="display: flex; justify-content: space-between; padding: 10px 0;">
+                    <span style="font-weight: bold; color: var(--color-accent-green);">Total Recycled:</span> 
+                    <span style="font-weight: bold; color: var(--color-accent-green);">${parseFloat(dashboardData.totalRecycled || 0).toFixed(1)} kg</span>
+                </li>
+                
+            </ul>
+
+        </div>
+
+        <div class="kpi-card" style="grid-column: 1/3; text-align:center; padding: 30px;">
+            <h2>Consistency Tracker (Activity Heatmap)</h2>
+            
+            <div id="consistency-heatmap" style="
+                min-height: 100px; 
+                margin-top: 15px; 
+                padding: 10px; 
+                border-radius: 8px; 
+                display: flex; 
+                flex-wrap: wrap; 
+                gap: 10px;
+                align-items: center;
+                justify-content: center;
+                color: #b0d9b0;
+            ">
+                Loading activity data...
+            </div>
+        </div>
+    </div>
+    </div>
+`;
+        
+        template = metricsTemplate;
+        loadFunction = () => { 
+            renderCharts(dashboardData.metrics);
+            renderConsistencyHeatmap(dashboardData.rawMonthlyData);
+         }; 
     } else if (pageName === 'tracker') {
         template = trackerTemplate;
         loadFunction = handleTrackerForm; 
