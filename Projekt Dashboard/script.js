@@ -158,7 +158,6 @@ const renderConsistencyHeatmap = (rawMonthlyData) => {
     const heatmapDiv = document.getElementById('consistency-heatmap');
     if (!heatmapDiv) return;
 
-    // Get the keys and sort them chronologically
     const monthKeys = Object.keys(rawMonthlyData).sort();
     
     let summaryHTML = '<div style="display: flex; flex-wrap: wrap; justify-content: center;">';
@@ -166,12 +165,9 @@ const renderConsistencyHeatmap = (rawMonthlyData) => {
     monthKeys.forEach(key => {
         const [year, month] = key.split('-');
         
-        // Use a date object to get the full month name (e.g., Dec)
-        // Note: month - 1 is used because JavaScript months are 0-indexed (0=Jan)
         const monthName = new Date(year, month - 1, 1).toLocaleString('default', { month: 'short' });
         const weight = rawMonthlyData[key];
         
-        // --- Logic for Intensity (The "Heat" in Heatmap) ---
         let intensity = '';
         if (weight > 50) intensity = 'background-color: #388E3C; border: 1px solid #C8E6C9;'; // High (Dark Green)
         else if (weight > 10) intensity = 'background-color: #4CAF50; border: 1px solid #A5D6A7;'; // Medium
@@ -201,6 +197,30 @@ const renderConsistencyHeatmap = (rawMonthlyData) => {
     } else {
         heatmapDiv.innerHTML = summaryHTML;
     }
+};
+const generateFullMonthlyRange = (loggedDataMap) => {
+    const fullMap = {};
+    const now = new Date();
+
+    for (let i = 11; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        
+        const monthKey = `${d.getFullYear()}-${d.getMonth() + 1}`;
+        fullMap[monthKey] = 0.0;
+    }
+    for (let i = 11; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+
+        const monthNum = d.getMonth() + 1;
+        const paddedMonth = String(monthNum).padStart(2, '0'); 
+        
+        const monthKey = `${d.getFullYear()}-${paddedMonth}`; 
+        
+    }
+    for (const key in loggedDataMap) {
+        fullMap[key] = parseFloat(loggedDataMap[key]) || 0.0;
+    }
+    return fullMap;
 };
   const signout = () => {
 signOut(auth).then(() => {
@@ -320,8 +340,7 @@ const settingsTemplate = `
     </header>
     <div class="kpi-card" style="padding: 40px;">
         <p style="color: #b0d9b0;">
-            Manage your profile, notification preferences, and privacy settings here.(But only sign out for now, Dev lives matter please 😭)
-        </p>
+            Manage your profile, notification preferences, and privacy settings here
     </div>
     <button class="signout-btn" onclick="signout()"><a href="#" data-page="logout"><i class="fas fa-sign-out-alt"></i></a></button>
 `;
@@ -336,34 +355,29 @@ const renderCharts = (data) => {
         const materialData = [];
         const backgroundColors = [];
         
-        // --- CRITICAL FIX: Defined Eco-Friendly Color Map ---
-        const colorMap = {
-            plasticRecycled: 'rgba(76, 175, 80, 1)',  // Vibrant Green (var(--color-accent-green))
-            paperRecycled: 'rgba(255, 152, 0, 1)',  // Warm Orange/Brown
-            glassRecycled: 'rgba(3, 169, 244, 1)',  // Light Blue (for clear glass/water)
-            metalRecycled: 'rgba(158, 158, 158, 1)', // Light Grey/Silver (for metal)
-        };
-        // You can also use colors from your CSS variables if they are accessible in JS:
-        // const colorMap = { ... plasticRecycled: getComputedStyle(document.documentElement).getPropertyValue('--color-accent-green').trim() };
-        // -----------------------------------------------------
 
-        // Loop through the material totals, only adding non-zero values
+        const colorMap = {
+            plasticRecycled: 'rgba(76, 175, 80, 1)',  
+            paperRecycled: 'rgba(255, 152, 0, 1)', 
+            glassRecycled: 'rgba(3, 169, 244, 1)',  
+            metalRecycled: 'rgba(158, 158, 158, 1)', 
+        };
+   
         for (const material in data) {
             const weight = parseFloat(data[material]);
             
             if (weight > 0) {
-                // Clean up the label name
+             
                 let label = material.replace('Recycled', '').charAt(0).toUpperCase() + material.slice(1).replace('Recycled', '');
 
                 materialLabels.push(label);
                 materialData.push(weight);
                 
-                // Assign the thematic color
-                backgroundColors.push(colorMap[material] || '#cccccc'); // Use a fallback light grey if key is missing
+                
+                backgroundColors.push(colorMap[material] || '#cccccc'); 
             }
         }
 
-        // ... (No Data check remains the same) ...
 
 
         new Chart(ctxBreakdown, {
@@ -551,16 +565,17 @@ const metricsTemplate = `
         </div>
 
         <div class="kpi-card" style="grid-column: 1/3; text-align:center; padding: 30px;">
-            <h2>Consistency Tracker (Activity Heatmap)</h2>
+            <h2>Monthly Recycle</h2>
             
             <div id="consistency-heatmap" style="
                 min-height: 100px; 
                 margin-top: 15px; 
                 padding: 10px; 
-                border-radius: 8px; 
+                border-radius: 8px;
+                border: none;  
                 display: flex; 
                 flex-wrap: wrap; 
-                gap: 10px;
+                gap: 10px; 
                 align-items: center;
                 justify-content: center;
                 color: #b0d9b0;
@@ -569,12 +584,13 @@ const metricsTemplate = `
             </div>
         </div>
     </div>
-    </div>
 `;
-        
+const loggedMonthlyData = metrics.monthlyDataMap;
+const fullMonthlyDataMap = generateFullMonthlyRange(loggedMonthlyData);
+        dashboardData.rawMonthlyData = fullMonthlyDataMap;
         template = metricsTemplate;
         loadFunction = () => { 
-            renderCharts(dashboardData.metrics);
+            renderCharts(dashboardData.metrics); 
             renderConsistencyHeatmap(dashboardData.rawMonthlyData);
          }; 
     } else if (pageName === 'tracker') {
@@ -584,7 +600,7 @@ const metricsTemplate = `
         template = settingsTemplate;
     } 
 
-    pageContentDiv.className = pageName === 'welcome' ? '' : 'content-grid'; // Use grid for data pages
+    pageContentDiv.className = pageName === 'welcome' ? '' : 'content-grid';
     pageContentDiv.innerHTML = template;
 
     if (loadFunction) {

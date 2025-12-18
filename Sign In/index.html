@@ -39,7 +39,7 @@
                         <input type="checkbox" id="remember" name="remember">
                         <label for="remember">Remember Me</label>
                     </div>
-                    <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
+                    <a href="forgot-password.html" onclick="regexauth()" class="forgot-link">Forgot Password?</a>
                 </div>
                    <!-- <div class="options-container">
                     <div class="remember-me">
@@ -227,16 +227,25 @@ signInForm.addEventListener('submit', (event) => {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <script>
+const regexauth = () => {
+const passwordInput = document.getElementById('password');
+const password = passwordInput.value;
+
+const minLengthRegex = /^.{8,}$/; 
+
+if (minLengthRegex.test(password)) {
+    console.log("Password meets minimum length requirement.");
+} else {
+    console.error("Password must be at least 8 characters long.");
+}
+}
     const modal = document.getElementById('forgotPasswordModal');
 
-    // Function to open the modal
     function openModal() {
         modal.setAttribute('aria-hidden', 'false');
-        // Add class to body to disable background scrolling (optional but good practice)
         document.body.style.overflow = 'hidden'; 
     }
 
-    // Function to close the modal
     function closeModal() {
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
@@ -249,16 +258,12 @@ signInForm.addEventListener('submit', (event) => {
         }
     });
     
-    // Attach the openModal function to the 'Forgot Password?' link
     document.querySelector('.forgot-link').addEventListener('click', (e) => {
-        e.preventDefault(); // Prevents navigating to '#'
+        e.preventDefault(); 
         openModal();
     });
 
-    // Close modal when the form button is clicked (simulating submission)
     document.querySelector('.modal-body-custom .cta-button').addEventListener('click', (e) => {
-        // e.preventDefault(); // Only uncomment this if you don't want the form to submit
-        // setTimeout(closeModal, 500); // Close after simulated submission
     });
 </script>
 </html>
