@@ -98,6 +98,9 @@ display: none;
     border: none;
     margin-top: 10px;
 }
+#z{
+display: none;
+}
  .google-btn{
 background-color: lightblue;
 color: white;

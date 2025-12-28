@@ -9,7 +9,6 @@
     --border-radius-lg: 18px; 
 }
 
-
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
@@ -363,7 +362,9 @@ color: #c1e7c1;
     body {
         flex-direction: column;
     }
-
+    /* .kpi-card{
+    width: 100%;
+    } */
     .sidebar {
         width: 100%;
         height: auto;
@@ -406,6 +407,7 @@ color: #c1e7c1;
     .top-stats-group {
         flex-wrap: wrap;
         justify-content: center;
+        align-items: center;
         gap: 20px 30px;
         font-size: 1rem;
     }

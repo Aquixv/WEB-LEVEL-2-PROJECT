@@ -48,9 +48,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebas
         console.error("Error accessing database for profile check:", error);
     });
         userprofile.innerHTML += `
-        <img src ="${user.photoURL}" alt= "DP" width='100'
+        <img src ="${user.photoURL}" onerror="this.src='./assets/profile.png';" alt= "DP" width='100'
         style = "border-radius:100%"/>
-        <h3>${user.displayName}</h3>`
+        <h3>${user.displayName || "Recycler"}</h3>`
     } else{
         setTimeout(() => {
             window.location.href = "../index.html";
@@ -158,9 +158,22 @@ const renderConsistencyHeatmap = (rawMonthlyData) => {
     const heatmapDiv = document.getElementById('consistency-heatmap');
     if (!heatmapDiv) return;
 
-    const monthKeys = Object.keys(rawMonthlyData).sort();
+    const monthKeys = Object.keys(rawMonthlyData).sort((a, b) => {
+        const [yearA, monthA] = a.split('-').map(Number);
+        const [yearB, monthB] = b.split('-').map(Number);
+        
+        // Sort by year first, then month
+        return yearA !== yearB ? yearA - yearB : monthA - monthB;
+    });
     
-    let summaryHTML = '<div style="display: flex; flex-wrap: wrap; justify-content: center;">';
+    let summaryHTML = `
+        <div style="
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+            justify-content: center; 
+            width: 100%;
+        ">`;
     
     monthKeys.forEach(key => {
         const [year, month] = key.split('-');
