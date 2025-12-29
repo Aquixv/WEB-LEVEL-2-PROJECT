@@ -162,7 +162,6 @@ const renderConsistencyHeatmap = (rawMonthlyData) => {
         const [yearA, monthA] = a.split('-').map(Number);
         const [yearB, monthB] = b.split('-').map(Number);
         
-        // Sort by year first, then month
         return yearA !== yearB ? yearA - yearB : monthA - monthB;
     });
     
