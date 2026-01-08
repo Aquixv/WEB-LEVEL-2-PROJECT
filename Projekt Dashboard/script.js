@@ -158,13 +158,13 @@ const renderConsistencyHeatmap = (rawMonthlyData) => {
     const heatmapDiv = document.getElementById('consistency-heatmap');
     if (!heatmapDiv) return;
 
-    const monthKeys = Object.keys(rawMonthlyData).sort((a, b) => {
+const monthKeys = Object.keys(rawMonthlyData).sort((a, b) => {
         const [yearA, monthA] = a.split('-').map(Number);
         const [yearB, monthB] = b.split('-').map(Number);
         
-        return yearA !== yearB ? yearA - yearB : monthA - monthB;
+
+        return yearA !== yearB ? yearA - yearB : monthA + monthB;
     });
-    
     let summaryHTML = `
         <div style="
             display: flex; 
