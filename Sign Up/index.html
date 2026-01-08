@@ -97,6 +97,7 @@
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 const SecondaryProvider = new TwitterAuthProvider();
+const tertProvider = new GithubAuthProvider();
 
 const regexauth = () => {
 const passwordInput = document.getElementById('password');
@@ -156,7 +157,7 @@ const XSignIn = () => {
 };
    const githubSignIn = () => {
     signupform.style.display = 'none';
-  signInWithPopup(auth, provider)
+  signInWithPopup(auth, tertProvider)
     .then((result) => {
       const user = result.user;
       console.log(user);
